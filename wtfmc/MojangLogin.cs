@@ -5,6 +5,7 @@
 
 using System;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 
@@ -12,12 +13,18 @@ namespace wtfmc
 {
     public sealed class MojangLogin : ILoginClient
     {
-        private string rawdata;
+        public MojangLogin()
+        {
+            hclient = new HttpClient
+            {
+                BaseAddress = new Uri("https://authserver.mojang.com")
+            };
+        }
 
-        private string AccessToken { get; set; }
-        private string ClientToken { get; set; }
-        private string ProfileID { get; set; }
-        private string ProfileName { get; set; }
+        private string rawdata;
+        public string AccessToken { get; private set; }
+        public string ClientToken { get; private set; }
+        private readonly HttpClient hclient;
 
         public string Data
         {
@@ -31,17 +38,16 @@ namespace wtfmc
                 JObject data = JObject.Parse(value);
                 ClientToken = (string)data["clientToken"];
                 AccessToken = (string)data["accessToken"];
-                ProfileID = (string)data["selectedProfile"]["id"];
-                ProfileName = (string)data["selectedProfile"]["name"];
             }
         }
 
         private async Task<HttpResponseMessage> PostString(string req)
         {
-            HttpClient hclient = new HttpClient
+            HttpRequestMessage msg = new HttpRequestMessage
             {
-                BaseAddress = new Uri("authserver.mojang.com")
+                Method = new HttpMethod("POST"),
             };
+            msg.Headers.Add("Content-Type", "application/json; charset=utf-8");
             return await hclient.PostAsync("/authenticate", new StringContent(req));
         }
 
@@ -73,10 +79,6 @@ namespace wtfmc
 
         public async Task<bool> CheckAvailable()
         {
-            HttpClient hclient = new HttpClient
-            {
-                BaseAddress = new Uri("authserver.mojang.com")
-            };
             HttpResponseMessage res = await hclient.GetAsync("/");
             if ((int)res.StatusCode != 200)
                 return false;
