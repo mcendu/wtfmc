@@ -4,19 +4,14 @@
  */
 
 using System;
-using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 
 namespace wtfmc
 {
-    public sealed class MojangLoginData : ILoginData
+    public sealed class MojangLogin : ILoginClient
     {
-        public MojangLoginData()
-        {
-        }
-
         private string rawdata;
 
         private string AccessToken { get; set; }
@@ -40,16 +35,8 @@ namespace wtfmc
                 ProfileName = (string)data["selectedProfile"]["name"];
             }
         }
-    }
-    public sealed class MojangLogin : ILoginClient
-    {
-        public readonly string clientToken;
-        public MojangLogin(string clientToken)
-        {
-            this.clientToken = clientToken;
-        }
 
-        private async Task<HttpResponseMessage> ReqAuth(string req)
+        private async Task<HttpResponseMessage> PostString(string req)
         {
             HttpClient hclient = new HttpClient
             {
@@ -58,39 +45,53 @@ namespace wtfmc
             return await hclient.PostAsync("/authenticate", new StringContent(req));
         }
 
-        public ILoginData Authenticate(string email, string passwd)
+        public void Authenticate(string email, string passwd)
         {
-            string req = "{" +
-                "\"agent\": {" +
-                "\"name\": \"Minecraft\", \"version\": 1" +
-                "}," +
-                "\"username\": \""+email+"\"," +
-                "\"password\": \""+passwd+"\"," +
-                "\"clientToken\": \""+clientToken+"\"," +
-                "\"requestUser\": true" +
-                "}";
-            HttpResponseMessage res = ReqAuth(req).Result;
-            if ((int)res.StatusCode == 200)
+            try
             {
-                return new MojangLoginData
+                string req = "{" +
+                    "\"agent\": {" +
+                    "\"name\": \"Minecraft\", \"version\": 1" +
+                    "}," +
+                    "\"username\": \"" + email + "\"," +
+                    "\"password\": \"" + passwd + "\"," +
+                    "\"clientToken\": \"" + ClientToken + "\"," +
+                    "\"requestUser\": true" +
+                    "}";
+                HttpResponseMessage res = PostString(req).Result;
+                if ((int)res.StatusCode != 200)
                 {
-                    Data = res.Content.ReadAsStringAsync().Result
-                };
+                    throw new AuthClientException("Authentication failed");
+                }
+                Data = res.Content.ReadAsStringAsync().Result;
             }
-            return null;
+            catch
+            {
+                throw new AuthClientException("An error occured while authenticating");
+            }
         }
 
-        public bool CheckAvailable()
+        public async Task<bool> CheckAvailable()
+        {
+            HttpClient hclient = new HttpClient
+            {
+                BaseAddress = new Uri("authserver.mojang.com")
+            };
+            HttpResponseMessage res = await hclient.GetAsync("/");
+            if ((int)res.StatusCode != 200)
+                return false;
+            JObject sstatus = JObject.Parse(res.Content.ReadAsStringAsync().Result);
+            if ((string)sstatus["Status"] != "OK")
+                return false;
+            return true;
+        }
+
+        public void LogOut()
         {
             throw new NotImplementedException();
         }
 
-        public void LogOut(ILoginData access)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ILoginData Refresh(ILoginData access)
+        public void Refresh()
         {
             throw new NotImplementedException();
         }
