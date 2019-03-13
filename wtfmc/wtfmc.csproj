@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Downloader.cs" />
     <Compile Include="ILoginClient.cs" />
     <Compile Include="MojangLogin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
