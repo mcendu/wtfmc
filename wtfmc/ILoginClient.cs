@@ -40,9 +40,22 @@ namespace wtfmc
         void LogOut();
     }
 
+    /// <summary>
+    /// Generic error for authentication failure.
+    /// </summary>
     public class AuthClientException : System.Exception
     {
         public AuthClientException(string message) : base(message)
+        {
+        }
+    }
+
+    /// <summary>
+    /// Thrown when authentication server returns an error message.
+    /// </summary>
+    public class BadAuthException : AuthClientException
+    {
+        public BadAuthException(string message) : base(message)
         {
         }
     }

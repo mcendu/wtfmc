@@ -19,11 +19,12 @@ namespace wtfmc
             {
                 BaseAddress = new Uri("https://authserver.mojang.com")
             };
+            ClientToken = "00000000000000000000000000000000";
         }
 
         private string rawdata;
         public string AccessToken { get; private set; }
-        public string ClientToken { get; private set; }
+        public string ClientToken { get; set; }
         private readonly HttpClient hclient;
 
         public string Data
@@ -35,46 +36,80 @@ namespace wtfmc
             set
             {
                 rawdata = value;
+                if (value == "")
+                    return;
                 JObject data = JObject.Parse(value);
                 ClientToken = (string)data["clientToken"];
                 AccessToken = (string)data["accessToken"];
             }
         }
 
-        private async Task<HttpResponseMessage> PostString(string req)
+        /// <summary>
+        /// Query the authentication server.
+        /// </summary>
+        /// <param name="method">A string representing a method.</param>
+        /// <param name="fields">A username-password pair if authenticating with them,
+        /// or null otherwise.</param>
+        /// <returns>A string with JSON data.</returns>
+        private async Task<string> AuthQuery(string method, string[] fields)
         {
-            HttpRequestMessage msg = new HttpRequestMessage
+            // Generate payload to be sent
+            JObject req = new JObject
             {
-                Method = new HttpMethod("POST"),
+                { "clientToken", ClientToken }
             };
-            msg.Headers.Add("Content-Type", "application/json; charset=utf-8");
-            return await hclient.PostAsync("/authenticate", new StringContent(req));
+            if (method == "authenticate")
+            {
+                req.Add("agent", new JObject
+                {
+                    { "name", "Minecraft" },
+                    { "version", 1 }
+                });
+                req.Add("username", fields[0]);
+                req.Add("password", fields[1]);
+                req.Add("requestUser", true);
+            }
+            else
+            {
+                req.Add("accessToken", AccessToken);
+            }
+
+            try
+            {
+                // Generate the HTTP POST message
+                HttpRequestMessage msg = new HttpRequestMessage
+                {
+                    Method = new HttpMethod("POST"),
+                    RequestUri = new Uri("/" + method)
+                };
+                msg.Headers.Add("Content-Type", "application/json; charset=utf-8");
+                msg.Content = new StringContent(req.ToString());
+                // Send the payload
+                HttpResponseMessage res = await hclient.SendAsync(msg);
+                string resContent = await res.Content.ReadAsStringAsync();
+                if (!res.IsSuccessStatusCode)
+                {
+                    GenException(resContent);
+                }
+                return resContent;
+            }
+            catch (Exception e)
+            {
+                throw new AuthClientException(e.ToString());
+            }
+        }
+
+        private static void GenException(string errordata)
+        {
+            JObject jobj = JObject.Parse(errordata);
+            string err = jobj["error"].ToString();
+            string errdesc = jobj["errorMessage"].ToString();
+            throw new BadAuthException($"{err}: {errdesc}");
         }
 
         public void Authenticate(string email, string passwd)
         {
-            try
-            {
-                string req = "{" +
-                    "\"agent\": {" +
-                    "\"name\": \"Minecraft\", \"version\": 1" +
-                    "}," +
-                    "\"username\": \"" + email + "\"," +
-                    "\"password\": \"" + passwd + "\"," +
-                    "\"clientToken\": \"" + ClientToken + "\"," +
-                    "\"requestUser\": true" +
-                    "}";
-                HttpResponseMessage res = PostString(req).Result;
-                if ((int)res.StatusCode != 200)
-                {
-                    throw new AuthClientException("Authentication failed");
-                }
-                Data = res.Content.ReadAsStringAsync().Result;
-            }
-            catch
-            {
-                throw new AuthClientException("An error occured while authenticating");
-            }
+            Data = AuthQuery("authenticate", new string[] { email, passwd }).Result;
         }
 
         public async Task<bool> CheckAvailable()
@@ -90,12 +125,29 @@ namespace wtfmc
 
         public void LogOut()
         {
-            throw new NotImplementedException();
+            Data = AuthQuery("invalidate").Result;
         }
 
         public void Refresh()
         {
-            throw new NotImplementedException();
+            try
+            {
+                AuthQuery("validate").Wait();
+            }
+            catch (BadAuthException)
+            {
+                Data = AuthQuery("refresh").Result;
+            }
+        }
+
+        /// <summary>
+        /// Query the authentication server, with the fields parameter omitted.
+        /// </summary>
+        /// <param name="method"></param>
+        /// <returns></returns>
+        private async Task<string> AuthQuery(string method)
+        {
+            return await AuthQuery(method, null);
         }
     }
 }
