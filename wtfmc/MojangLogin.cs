@@ -36,8 +36,6 @@ namespace wtfmc
             set
             {
                 rawdata = value;
-                if (value == "")
-                    return;
                 JObject data = JObject.Parse(value);
                 ClientToken = (string)data["clientToken"];
                 AccessToken = (string)data["accessToken"];
@@ -125,7 +123,7 @@ namespace wtfmc
 
         public void LogOut()
         {
-            Data = AuthQuery("invalidate").Result;
+            AuthQuery("invalidate").Wait();
         }
 
         public void Refresh()
