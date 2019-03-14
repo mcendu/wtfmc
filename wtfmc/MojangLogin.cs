@@ -112,7 +112,14 @@ namespace wtfmc
 
         public async Task<bool> CheckAvailable()
         {
-            HttpResponseMessage res = await hclient.GetAsync("/");
+            try
+            {
+                HttpResponseMessage res = await hclient.GetAsync("/");
+            }
+            catch
+            {
+                return false;
+            }
             if ((int)res.StatusCode != 200)
                 return false;
             JObject sstatus = JObject.Parse(res.Content.ReadAsStringAsync().Result);

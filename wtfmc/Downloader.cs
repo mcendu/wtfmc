@@ -11,45 +11,56 @@ namespace wtfmc
 {
     public class Downloader
     {
-        public readonly Download target;
-        public readonly Task task;
-
-        public Downloader(Download target)
+        /// <summary>
+        /// The HTTP client.
+        /// HTTP客户端。
+        /// </summary>
+        private readonly HttpClient hclient;
+        
+        public Downloader()
         {
-            this.target = target;
+            hclient = new HttpClient;
         }
 
-        public void TaskBody()
+        /// <summary>
+        /// Download multiple files concurrently.
+        /// 并发式下载多个文件。
+        /// </summary>
+        /// <param name="q"></param>
+        public void Download(Queue<Download> q)
         {
-            HttpClient hclient = new HttpClient();
-            FileStream file = new FileStream(target.toPath, FileMode.Create);
-            Task<Stream> remote = hclient.GetStreamAsync(target.path);
+            Parallel.ForEach(q, delegate (Download i)
+            {
+                FileStream to = new FileStream(i.to, FileMode.Create);
+                Stream from = hclient.GetStreamAsync(i.from).Result;
+                byte[] buffer = new byte[1024];
+                while ((i.progress += from.Read(buffer, 0, 1024)) != 0)
+                {
+                    to.Write(buffer, 0, 1024);
+                }
+
+            });
         }
     }
-    
+
     /// <summary>
-    /// A downloadable object.
+    /// Represents a file to be downloaded.
+    /// 一个需要下载的文件。
     /// </summary>
     public class Download
     {
-        public Download(string hash, Uri path)
-        {
-            this.hash = hash ?? throw new ArgumentNullException(nameof(hash));
-            this.path = path;
-        }
-        public Download(string hash, string path) => new Download(hash, new Uri(path));
+        public readonly Uri from;
+        public readonly string to;
+        public readonly byte[] hash;
+        public readonly long length;
+        public long progress;
 
-        /// <summary>
-        /// The hash for the resource.
-        /// </summary>
-        public readonly string hash;
-        /// <summary>
-        /// The URI of the resource.
-        /// </summary>
-        public readonly Uri path;
-        /// <summary>
-        /// The path the download would go to.
-        /// </summary>
-        public string toPath;
+        public Download(Uri from, string to, byte[] hash, long length)
+        {
+            this.from = from;
+            this.to = to;
+            this.hash = hash;
+            this.length = length;
+        }
     }
 }
