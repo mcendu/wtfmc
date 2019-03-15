@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,10 +11,10 @@ namespace wtfmc
     public static class Util
     {
         /// <summary>
-        /// Convert a hexadecimal number to a little-endian byte array.
+        /// Convert a byte array to its hex representation.
         /// </summary>
-        /// <param name="input">A hexadecimal number.</param>
-        /// <returns>A byte array.</returns>
+        /// <param name="bin">The byte array.</param>
+        /// <returns>The hex representation of bin.</returns>
         public static string bintohex(byte[] bin)
         {
             string o = "";
@@ -22,5 +24,8 @@ namespace wtfmc
             }
             return o.ToLower();
         }
+
+        public static bool checkIntegrity(Stream hInput, string cksum)
+            => bintohex(SHA1.Create().ComputeHash(hInput)) == cksum;
     }
 }

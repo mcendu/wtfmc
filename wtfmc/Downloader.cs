@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using log4net;
@@ -12,16 +11,16 @@ namespace wtfmc
 {
     public class Downloader
     {
-        /// <summary>
-        /// The HTTP client.
-        /// HTTP客户端。
-        /// </summary>
-        private readonly HttpClient hclient;
+        private readonly HttpClient hclient = new HttpClient();
+        private TaskFactory factory = new TaskFactory();
+        public readonly short maxThreads;
+        public Queue<Download> downQueue;
         private static readonly ILog log = LogManager.GetLogger(typeof(Downloader));
+        public bool qend = false;
         
-        public Downloader()
+        public Downloader(short threads)
         {
-            hclient = new HttpClient();
+            maxThreads = threads;
         }
 
         /// <summary>
@@ -29,24 +28,56 @@ namespace wtfmc
         /// 并发式下载多个文件。
         /// </summary>
         /// <param name="q"></param>
-        public void Download(Queue<Download> q)
+        public async Task DownloadAsync()
         {
-            Parallel.ForEach(q, delegate (Download i)
+            Download pend;
+            Task[] tlist = new Task[maxThreads];
+            while (!qend || downQueue.Count != 0)
             {
-                log.Info($"Downloading {i.from.AbsoluteUri}");
-                FileStream to = new FileStream(i.to, FileMode.Create, FileAccess.ReadWrite);
-                int proggain;
-                byte[] buffer = new byte[1024];
-                Stream from = hclient.GetStreamAsync(i.from).Result;
-                // Concurrently move data across streams
-                while ((proggain = from.Read(buffer, 0, 1024)) != 0)
+                for (int j=0; j<maxThreads; j++)
                 {
-                    i.progress += proggain;
-                    to.Write(buffer, 0, 1024);
+                    if (tlist[j] == null || tlist[j].Status != TaskStatus.Running)
+                    {
+                        pend = downQueue.Dequeue();
+                        tlist[j] = factory.StartNew(delegate (object input)
+                        {
+                            // Initialize variables
+                            Download dl = input as Download;
+                            log.Info($"Downloading {dl.from.AbsoluteUri}");
+                            Stream from = hclient.GetStreamAsync(dl.from).Result;
+                            FileStream to = new FileStream(dl.to, FileMode.Create, FileAccess.ReadWrite);
+                            int readlen;
+                            byte[] buf = new byte[2048];
+
+                            // Concurrently move data from download stream to file
+                            while ((readlen = from.Read(buf, 0, 2048)) != 0)
+                            {
+                                to.Write(buf, 0, 2048);
+                            }
+                            to.Flush();
+                            to.Position = 0;
+
+                            // Check the hash of the download
+                            if (!Util.checkIntegrity(to, dl.hash))
+                            {
+                                log.Warn($"Failed to download {dl.from.AbsoluteUri}; Requeueing");
+                                downQueue.Enqueue(dl);
+                            } else
+                            {
+                                log.Info($"Downloaded {dl.from.AbsoluteUri}");
+                            }
+                        }, pend);
+
+                        // When download queue is empty
+                        if (qend && downQueue.Count == 0)
+                        {
+                            Task.WaitAll(tlist);
+                            break;
+                        }
+                        while (!qend && downQueue.Count == 0) ;
+                    }
                 }
-                // TODO: integrity check
-                log.Info($"Finished download of {i.from.AbsoluteUri}");
-            });
+            }
         }
     }
 
@@ -60,7 +91,6 @@ namespace wtfmc
         public readonly string to;
         public readonly string hash;
         public readonly long length;
-        public long progress;
 
         public Download(Uri from, string to, string hash, long length)
         {
