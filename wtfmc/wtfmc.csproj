@@ -52,6 +52,7 @@
     <Compile Include="ILoginClient.cs" />
     <Compile Include="MojangLogin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Util.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -112,9 +112,10 @@ namespace wtfmc
 
         public async Task<bool> CheckAvailable()
         {
+            HttpResponseMessage res;
             try
             {
-                HttpResponseMessage res = await hclient.GetAsync("/");
+                res = await hclient.GetAsync("/");
             }
             catch
             {
