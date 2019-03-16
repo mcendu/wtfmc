@@ -14,7 +14,7 @@ namespace wtfmc
         private readonly HttpClient hclient = new HttpClient();
         private TaskFactory factory = new TaskFactory();
         public readonly short maxThreads;
-        public Queue<Download> downQueue;
+        public Queue<Download> downQueue = null;
         private static readonly ILog log = LogManager.GetLogger(typeof(Downloader));
         public bool qend = false;
         
@@ -23,18 +23,21 @@ namespace wtfmc
             maxThreads = threads;
         }
 
+        public Downloader() => new Downloader(8);
+
         /// <summary>
         /// Download multiple files concurrently.
         /// 并发式下载多个文件。
         /// </summary>
         /// <param name="q"></param>
-        public async Task DownloadAsync()
+        public async Task DownloadAsync() => await Task.Run(delegate ()
         {
+            if (downQueue == null) downQueue = new Queue<Download>();
             Download pend;
             Task[] tlist = new Task[maxThreads];
             while (!qend || downQueue.Count != 0)
             {
-                for (int j=0; j<maxThreads; j++)
+                for (int j = 0; j < maxThreads; j++)
                 {
                     if (tlist[j] == null || tlist[j].Status != TaskStatus.Running)
                     {
@@ -62,7 +65,8 @@ namespace wtfmc
                             {
                                 log.Warn($"Failed to download {dl.from.AbsoluteUri}; Requeueing");
                                 downQueue.Enqueue(dl);
-                            } else
+                            }
+                            else
                             {
                                 log.Info($"Downloaded {dl.from.AbsoluteUri}");
                             }
@@ -78,7 +82,7 @@ namespace wtfmc
                     }
                 }
             }
-        }
+        });
     }
 
     /// <summary>

@@ -2,7 +2,7 @@
  * By McEndu and skyhgzsh
  * Copyright (C) 2019 MIT License
  */
-
+using System;
 using System.Threading.Tasks;
 
 namespace wtfmc
@@ -51,6 +51,10 @@ namespace wtfmc
     public class AuthClientException : System.Exception
     {
         public AuthClientException(string message) : base(message)
+        {
+        }
+
+        public AuthClientException(string message, Exception innerException) : base(message, innerException)
         {
         }
     }
