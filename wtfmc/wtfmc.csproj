@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Downloader.cs" />
+    <Compile Include="ILaunch.cs" />
     <Compile Include="ILoginClient.cs" />
     <Compile Include="MojangAPI\Assets.cs" />
     <Compile Include="MojangAPI\Login.cs" />
