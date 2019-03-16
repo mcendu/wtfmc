@@ -1,0 +1,22 @@
+wtfmc.ILoginClient
+一个身份验证客户端。
+
+implemented by
+    wtfmc.MojangAPI.Login
+
+string wtfmc.ILoginClient.Data
+原始的验证数据。
+
+bool wtfmc.ILoginClient.CheckAvailable()
+检查服务器是否可以访问。
+
+void wtfmc.ILoginClient.Authenticate(string email, string passwd)
+使用邮箱/用户名与密码完成验证。
+    email  邮箱/用户名
+    passwd 密码
+
+void wtfmc.ILoginClient.Refresh()
+更新验证信息。
+
+void wtfmc.ILoginClient.LogOut()
+注销验证信息。

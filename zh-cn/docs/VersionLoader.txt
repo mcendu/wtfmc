@@ -1,0 +1,20 @@
+wtfmc.VersionLoader
+读取游戏版本信息。
+
+implemented by
+    wtfmc.MojangAPI.Assets
+        wtfmc.MojangAPI.Version21
+        wtfmc.MojangAPI.Version18
+
+Queue<Download> wtfmc.VersionLoader.FileQ
+待检查文件的队列。
+
+void wtfmc.VersionLoader.LoadVersionIndex(string path)
+加载一段游戏版本信息，并将需要检查的文件加入队列。
+
+void wtfmc.VersionLoader.LoadAssetsIndex(string path)
+加载一段游戏资源信息，并将需要检查的文件加入队列。
+
+void wtfmc.VersionLoader.CheckFiles()
+检查队列中的文件；如果文件不存在，或文件的SHA-1不正确，
+则将这个文件加入下载队列中，

@@ -1,0 +1,11 @@
+wtfmc.Downloader
+一个可以并发（相当于同时）下载多个文件的下载器。
+
+Task wtfmc.Downloader.DownloadAsync()
+并发下载多个文件。
+原理为从队列中抽取文件信息，并访问文件的url。
+下载完毕后，会检验文件的SHA-1值。
+
+wtfmc.Download
+一个文件的信息，包括文件的url，将要被下载到哪里，
+文件长度，以及SHA-1值。

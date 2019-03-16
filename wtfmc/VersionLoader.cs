@@ -20,13 +20,13 @@ namespace wtfmc
         /// <summary>
         /// Load and parse a version.json, and queue files for checking.
         /// </summary>
-        /// <param name="path">The path of the file.</param>
+        /// <param name="path">The path of version.json.</param>
         public abstract void LoadVersionIndex(string path);
 
         /// <summary>
         /// Load and parse an assets.json, and queue files for checking.
         /// </summary>
-        /// <param name="path"></param>
+        /// <param name="path">The path of assets.json.</param>
         public abstract void LoadAssetsIndex(string path);
 
         /// <summary>

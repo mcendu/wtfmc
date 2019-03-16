@@ -16,7 +16,6 @@ namespace wtfmc
         public readonly short maxThreads;
         public Queue<Download> downQueue = null;
         private static readonly ILog log = LogManager.GetLogger(typeof(Downloader));
-        public bool qend = false;
         
         public Downloader(short threads)
         {
@@ -27,7 +26,6 @@ namespace wtfmc
 
         /// <summary>
         /// Download multiple files concurrently.
-        /// 并发式下载多个文件。
         /// </summary>
         /// <param name="q"></param>
         public async Task DownloadAsync() => await Task.Run(delegate ()
@@ -35,7 +33,7 @@ namespace wtfmc
             if (downQueue == null) downQueue = new Queue<Download>();
             Download pend;
             Task[] tlist = new Task[maxThreads];
-            while (!qend || downQueue.Count != 0)
+            while (downQueue.Count != 0)
             {
                 for (int j = 0; j < maxThreads; j++)
                 {
@@ -73,12 +71,11 @@ namespace wtfmc
                         }, pend);
 
                         // When download queue is empty
-                        if (qend && downQueue.Count == 0)
+                        if (downQueue.Count == 0)
                         {
                             Task.WaitAll(tlist);
                             break;
                         }
-                        while (!qend && downQueue.Count == 0) ;
                     }
                 }
             }
@@ -87,7 +84,6 @@ namespace wtfmc
 
     /// <summary>
     /// Represents a file to be downloaded.
-    /// 一个需要下载的文件。
     /// </summary>
     public class Download
     {

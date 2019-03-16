@@ -16,14 +16,12 @@ namespace wtfmc
 
         /// <summary>
         /// Check if the Login server is available.
-        /// 检查服务器是否可以访问。
         /// </summary>
         /// <returns>true if server is up, false otherwise.</returns>
         Task<bool> CheckAvailable();
 
         /// <summary>
         /// Authenticate with server with email & password.
-        /// 使用用户名和密码登录。
         /// </summary>
         /// <param name="email">Email, or sometimes Legacy username.</param>
         /// <param name="passwd">Password</param>
@@ -31,14 +29,12 @@ namespace wtfmc
 
         /// <summary>
         /// Refresh a login.
-        /// 刷新登录（emmm）。
         /// </summary>
         /// <param name="access">A LoginData.</param>
         void Refresh();
 
         /// <summary>
         /// Logout.
-        /// 注销。
         /// </summary>
         /// <param name="access">A LoginData.</param>
         void LogOut();

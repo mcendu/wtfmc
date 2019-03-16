@@ -11,7 +11,6 @@ namespace wtfmc
 {
     public static class Util
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(Util));
         /// <summary>
         /// Convert a byte array to its hex representation.
         /// </summary>
@@ -35,9 +34,16 @@ namespace wtfmc
         /// Would prefer Java 8 over other Java revisions.
         /// </summary>
         /// <remarks>
+        /// <para>
         /// This method only searches the default installation
         /// directory, and would not check directories outside
         /// it.
+        /// </para>
+        /// <para>
+        /// Aside from the "Java 8 first" rule, this method
+        /// prefers later Java over older Java, and JDK over
+        /// JRE, in descending order of precedence.
+        /// </para>
         /// </remarks>
         /// <returns>The absolute path to the JVM.</returns>
         public static string locateJava()
@@ -114,7 +120,7 @@ namespace wtfmc
                     continue;
                 }
             }
-            return selPath;
+            return selPath + @"\bin\javaw.exe";
         }
     }
 }

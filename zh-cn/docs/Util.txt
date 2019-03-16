@@ -1,0 +1,16 @@
+wtfmc.Util
+
+string wtfmc.Util.bintohex(byte[])
+将一段数据转换为十六进制。
+
+bool wtfmc.Util.checkIntegrity(Stream hInput, string cksum)
+检查一个文件的SHA-1。
+
+string wtfmc.Util.locateJava()
+寻找一个JVM。
+如果找到多个JVM，按照如下规则进行（优先级下降顺序）：
+1、优先选择Java 8。
+2、优先选择新版本。
+3、JDK先于JRE。
+这个函数仅仅搜索Java的默认安装位置；默认位置以外安装的任何Java版本
+都会被忽略。
