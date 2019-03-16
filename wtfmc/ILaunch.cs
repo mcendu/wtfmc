@@ -18,20 +18,12 @@ namespace wtfmc
         ILoginClient login { get; }
 
         /// <summary>
-        /// Generate command line arguments.
+        /// The JVM executable.
         /// </summary>
-        /// <param name="gameDir">Directory of the game.</param>
-        /// <param name="version">The version name.</param>
-        /// <param name="exe">The path of the VM.</param>
-        /// <returns>
-        /// A <code>string[]</code> consisting of command line args.
-        /// The 0th entry of the returned value is the name of the
-        /// exe file (in wtfmc.MojangAPI.Launch, java).
-        /// </returns>
-        string[] genArgs(string gameDir, string version, string exe);
+        string VMEXE { get; set; }
 
         /// <summary>
-        /// Generate command line srguments, using default VM search path.
+        /// Generate command line arguments.
         /// </summary>
         /// <param name="gameDir">Directory of the game.</param>
         /// <param name="version">The version name.</param>
