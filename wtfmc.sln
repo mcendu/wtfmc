@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "wtfmc", "wtfmc\wtfmc.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "unit", "wtfmc_unit\unit.csproj", "{2A035B27-81FA-41BF-9397-4876169BB3BB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "example", "example\example.csproj", "{AF0A29CE-01CC-4052-8FD3-F5226C448E66}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,10 +21,6 @@ Global
 		{2A035B27-81FA-41BF-9397-4876169BB3BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2A035B27-81FA-41BF-9397-4876169BB3BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2A035B27-81FA-41BF-9397-4876169BB3BB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AF0A29CE-01CC-4052-8FD3-F5226C448E66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AF0A29CE-01CC-4052-8FD3-F5226C448E66}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AF0A29CE-01CC-4052-8FD3-F5226C448E66}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AF0A29CE-01CC-4052-8FD3-F5226C448E66}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
