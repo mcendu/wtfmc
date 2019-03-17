@@ -7,7 +7,7 @@ using Newtonsoft.Json.Linq;
 
 namespace wtfmc.MojangAPI
 {
-    public abstract class JVMLaunch : ILaunch
+    public abstract class Launcher : ILaunch
     {
         public abstract ILoginClient login { get; }
         public abstract string VMEXE { get; set; }
