@@ -15,45 +15,53 @@ namespace wtfmc
         /// <summary>
         /// Gives the path to version_manifest.json.
         /// </summary>
-        Uri getVersionManifest();
+        Uri versionManifest();
 
         /// <summary>
-        /// Gives the path to a client's json.
+        /// Gives the path to a version info.
         /// </summary>
-        /// <param name="version">A version of Minecraft.</param>
-        Uri getJson(string version);
+        /// <param name="index">The position in versions array.</param>
+        /// <returns></returns>
+        Uri json(int index);
+
+        /// <summary>
+        /// Gives the path to a version info.
+        /// </summary>
+        /// <param name="version">The version id.</param>
+        /// <returns></returns>
+        Uri json(string version);
 
         /// <summary>
         /// Gives the path to a client.jar.
         /// </summary>
         /// <param name="json">The accompanying json.</param>
-        Uri getClient(JObject json);
+        Uri client(JObject json);
 
         /// <summary>
         /// Gives the path to a server.jar.
         /// </summary>
         /// <param name="json">The accompanying json.</param>
-        Uri getServer(JObject json);
+        Uri server(JObject json);
 
         /// <summary>
         /// Gives the path to an assets index.
         /// </summary>
         /// <param name="json">The json of a version.</param>
         /// <returns></returns>
-        Uri getAssetsIndex(JObject json);
+        Uri assetsIndex(JObject json);
 
         /// <summary>
         /// Gives a list of path to required libs.
         /// </summary>
         /// <param name="json">The json of a version.</param>
         /// <returns></returns>
-        List<Uri> getLibraries(JObject json);
+        List<Uri> libraries(JObject json);
 
         /// <summary>
         /// Gives the path to a logger config file.
         /// </summary>
         /// <param name="json">The json of a version.</param>
         /// <returns></returns>
-        Uri getLoggerConf(JObject json);
+        Uri loggerConf(JObject json);
     }
 }

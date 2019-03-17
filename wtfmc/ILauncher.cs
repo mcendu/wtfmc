@@ -5,7 +5,7 @@ namespace wtfmc
     /// <summary>
     /// Launches Minecraft.
     /// </summary>
-    interface ILaunch
+    interface ILauncher
     {
         /// <summary>
         /// Auth client.
