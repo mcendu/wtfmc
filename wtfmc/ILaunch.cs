@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 
 namespace wtfmc
 {
@@ -13,7 +8,7 @@ namespace wtfmc
     interface ILaunch
     {
         /// <summary>
-        /// Auth client. This field is null in offline mode.
+        /// Auth client.
         /// </summary>
         ILoginClient login { get; }
 
@@ -27,12 +22,14 @@ namespace wtfmc
         /// </summary>
         /// <param name="gameDir">Directory of the game.</param>
         /// <param name="version">The version name.</param>
+        /// <param name="customOpts">List of custom options.</param>
+        /// <param name="customVMOpts">List of custom JVM options.</param>
         /// <returns>
         /// A <code>string[]</code> consisting of command line args.
         /// The 0th entry of the returned value is the name of the
         /// exe file (in wtfmc.MojangAPI.Launch, java).
         /// </returns>
-        string[] genArgs(string gameDir, string version);
+        string[] genArgs(string gameDir, string version, string[] customOpts, string[] customVMOpts);
 
         /// <summary>
         /// Launch Minecraft.

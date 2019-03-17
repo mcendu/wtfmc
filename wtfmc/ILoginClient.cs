@@ -10,6 +10,26 @@ namespace wtfmc
     public interface ILoginClient
     {
         /// <summary>
+        /// The type of login.
+        /// </summary>
+        string LoginType { get; }
+
+        /// <summary>
+        /// The access token for the client.
+        /// </summary>
+        string AccessToken { get; }
+
+        /// <summary>
+        /// The username of the user.
+        /// </summary>
+        string Username { get; }
+
+        /// <summary>
+        /// The UUID of the user.
+        /// </summary>
+        string ID { get; }
+
+        /// <summary>
         /// Raw login data.
         /// </summary>
         string Data { set; get; }
@@ -18,7 +38,7 @@ namespace wtfmc
         /// Check if the Login server is available.
         /// </summary>
         /// <returns>true if server is up, false otherwise.</returns>
-        Task<bool> CheckAvailable();
+        bool CheckAvailable();
 
         /// <summary>
         /// Authenticate with server with email & password.
@@ -42,7 +62,6 @@ namespace wtfmc
 
     /// <summary>
     /// Exception class for any error encoutered while logging in.
-    /// 代表登录过程中发生的错误。
     /// </summary>
     public class AuthClientException : System.Exception
     {
@@ -57,7 +76,6 @@ namespace wtfmc
 
     /// <summary>
     /// Exception thrown when authentication server returns an error message.
-    /// 服务端返回错误信息时的抛出的异常。
     /// </summary>
     public class BadAuthException : AuthClientException
     {

@@ -15,8 +15,9 @@ namespace wtfmc.MojangAPI
             FileQ = new Queue<Download>();
         }
 
-        public override void LoadVersionIndex(string path)
+        public override List<string> LoadVersionIndex(string path)
         {
+            Queue<Download> Q = new Queue<Download>;
             if (path == null)
             {
                 throw new ArgumentNullException(nameof(path));
@@ -29,7 +30,7 @@ namespace wtfmc.MojangAPI
             FileQ.Enqueue(genDlData(assetIndex, $"assets/indexes/{new Uri(assetIndex["url"].ToString()).Segments[4]}"));
             // Queue the client jar
             JToken clientJar = index["downloads"]["client"];
-            FileQ.Enqueue(genDlData(clientJar, $"versions/{vNo}/{vNo}.jar"));
+            Q.Enqueue(genDlData(clientJar, $"versions/{vNo}/{vNo}.jar"));
             // Queue the required libraries
             foreach (JObject i in (JArray)index["libraries"])
             {
@@ -47,9 +48,17 @@ namespace wtfmc.MojangAPI
                 else
                 {
                     string dlTo = i["downloads"]["artifact"]["path"].ToString();
-                    FileQ.Enqueue(genDlData(i["downloads"]["artifact"], $"libraries/{dlTo}"));
+                    Q.Enqueue(genDlData(i["downloads"]["artifact"], $"libraries/{dlTo}"));
                 }
             }
+            // Generate return data.
+            List<string> ret = new List<string>;
+            foreach (Download i in Q)
+            {
+                ret.Add(i.to);
+                FileQ.Enqueue(i);
+            }
+            return ret;
         }
     }
 }

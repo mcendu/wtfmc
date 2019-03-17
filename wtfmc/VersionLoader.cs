@@ -18,10 +18,10 @@ namespace wtfmc
         public Queue<Download> FileQ { get; set; }
 
         /// <summary>
-        /// Load and parse a version.json, and queue files for checking.
+        /// Load and parse a version.json, queue files for checking, and return a list of jar files.
         /// </summary>
         /// <param name="path">The path of version.json.</param>
-        public abstract void LoadVersionIndex(string path);
+        public abstract List<string> LoadVersionIndex(string path);
 
         /// <summary>
         /// Load and parse an assets.json, and queue files for checking.

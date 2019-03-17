@@ -11,9 +11,9 @@ using Newtonsoft.Json.Linq;
 
 namespace wtfmc.MojangAPI
 {
-    public sealed class Login : ILoginClient
+    public sealed class MojangLogin : ILoginClient
     {
-        public Login()
+        public MojangLogin()
         {
             hclient = new HttpClient
             {
@@ -24,8 +24,12 @@ namespace wtfmc.MojangAPI
 
         private string rawdata;
         public string AccessToken { get; private set; }
-        public string ClientToken { get; set; }
+        public string ClientToken { get; private set; }
+        public string Username { get; private set; }
+        public string ID { get; private set; }
         private readonly HttpClient hclient;
+
+        public string LoginType => "mojang";
 
         public string Data
         {
@@ -39,6 +43,8 @@ namespace wtfmc.MojangAPI
                 JObject data = JObject.Parse(value);
                 ClientToken = (string)data["clientToken"];
                 AccessToken = (string)data["accessToken"];
+                Username = (string)data["selectedProfile"]["name"];
+                ID = (string)data["selectedProfile"]["id"];
             }
         }
 
@@ -110,12 +116,12 @@ namespace wtfmc.MojangAPI
             Data = AuthQuery("authenticate", new string[] { email, passwd }).Result;
         }
 
-        public async Task<bool> CheckAvailable()
+        public bool CheckAvailable()
         {
             HttpResponseMessage res;
             try
             {
-                res = await hclient.GetAsync("/");
+                res = hclient.GetAsync("/").Result;
             }
             catch
             {
