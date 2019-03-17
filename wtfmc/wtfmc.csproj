@@ -58,6 +58,7 @@
     <Compile Include="MojangAPI\MojangDl.cs" />
     <Compile Include="MojangAPI\MojangLogin.cs" />
     <Compile Include="MojangAPI\Offline.cs" />
+    <Compile Include="MojangAPI\VersionCommon.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RuleReader.cs" />
     <Compile Include="Util.cs" />

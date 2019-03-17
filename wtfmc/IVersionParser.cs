@@ -30,5 +30,15 @@ namespace wtfmc
         /// </summary>
         /// <returns>A comma-separated list of jars.</returns>
         string generateClasspath();
+
+        /// <summary>
+        /// Generate command line arguments for game.
+        /// </summary>
+        List<string> generateArgs();
+
+        /// <summary>
+        /// Generate command line arguments for JVM.
+        /// </summary>
+        List<string> generateVMArgs();
     }
 }
