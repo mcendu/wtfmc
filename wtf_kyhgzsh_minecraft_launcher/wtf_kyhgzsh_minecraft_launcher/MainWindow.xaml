@@ -16,7 +16,7 @@
                     <Label x:Name="password_show" Content="密码：" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="111,70,0,0"/>
                     <PasswordBox x:Name="password" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="170,75,0,0" Width="100" IsEnabled="False"/>
                     <TextBox x:Name="access" HorizontalAlignment="Left" Height="18" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" Margin="170,45,0,0"/>
-                    <ComboBox x:Name="way" HorizontalAlignment="Left" VerticalAlignment="Top" Width="80" Margin="180,14,0,0" IsReadOnly="True" SelectedIndex="1" SelectionChanged="way_SelectionChanged">
+                    <ComboBox x:Name="way" HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Margin="180,14,0,0" IsReadOnly="True" SelectedIndex="1" SelectionChanged="way_SelectionChanged">
                         <ComboBoxItem Content="盗版" HorizontalAlignment="Left" Width="118"/>
                         <ComboBoxItem Content="正版登录" HorizontalAlignment="Left" Width="118"/>
                     </ComboBox>
@@ -24,6 +24,7 @@
                         <ListBoxItem Content="ListBoxItem"/>
 
                     </ListBox>
+                    <Button x:Name="login" Content="登陆" HorizontalAlignment="Left" Margin="111,100,0,0" VerticalAlignment="Top" Width="159"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Java">

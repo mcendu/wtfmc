@@ -23,7 +23,7 @@ namespace wtf_kyhgzsh_minecraft_launcher
         public MainWindow()
         {
             InitializeComponent();
-            run_version_setting.
+
         }
 
         private void way_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -32,11 +32,13 @@ namespace wtf_kyhgzsh_minecraft_launcher
             {
                 access_show.Content = "用户名:";
                 password.IsEnabled = false;
+                login.Content = "传入";
             }
             if (way.SelectedIndex == 1)
             {
                 access_show.Content = "账号:";
                 password.IsEnabled = true;
+                login.Content = "登陆";
             }
         }
     }
