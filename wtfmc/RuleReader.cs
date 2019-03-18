@@ -41,23 +41,37 @@ namespace wtfmc
 
         public ILoginClient Login { get; set; }
 
-        public JObject ProfileOpts { get; set; }
-
-        public bool Execute(JObject rule)
+        private bool Determine(JObject rule)
         {
             if (rule.ContainsKey("os"))
             {
-                if (!((string)rule["os"]["name"] == getOS() || (string)rule["os"]["name"] == "unknown"))
-                    return false;
-                if (!((string)rule["os"]["arch"] == getArch()))
-                    return false;
+                JObject os = (JObject)rule["os"];
+                if (os.ContainsKey("name"))
+                    if ((string)os["name"] != "unknown" && (string)os["name"] != getOS())
+                        return false;
+                if (os.ContainsKey("arch"))
+                    if ((string)os["arch"] != getArch())
+                        return false;
             }
             if (rule.ContainsKey("features"))
             {
-                if (!isDemo())
-                    return false;
+                JObject feats = (JObject)rule["features"];
+                if (feats.ContainsKey("is_demo_user"))
+                    if ((bool)feats["is_demo_user"] != isDemo())
+                        return false;
             }
             return true;
+        }
+
+        public void Execute(JObject rule, Action action)
+        {
+            if (rule == null)
+                action();
+            else
+            {
+                if (Determine(rule))
+                    action();
+            }
         }
     }
 }

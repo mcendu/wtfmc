@@ -51,21 +51,35 @@ namespace wtfmc
     }
 
     /// <summary>
-    /// Represents a file to be downloaded.
+    /// Represents a file and related data.
     /// </summary>
     public class Download
     {
         public readonly Uri src;
         public readonly string path;
         public readonly string hash;
-        public readonly long length;
+        // public readonly long length;
 
-        public Download(Uri src, string path, string hash, long length)
+        public Download(Uri src, string path, string hash)
         {
             this.src = src;
             this.path = path;
             this.hash = hash;
-            this.length = length;
+        }
+
+        /// <summary>
+        /// Check the integrity of a file.
+        /// </summary>
+        public bool Check()
+        {
+            try
+            {
+                return Util.checkIntegrity(File.Open(path, FileMode.Open), hash);
+            }
+            catch (IOException)
+            {
+                return false;
+            }
         }
     }
 }
