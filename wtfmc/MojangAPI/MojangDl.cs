@@ -62,17 +62,20 @@ namespace wtfmc.MojangAPI
 
         public Uri assetsIndex(JObject json)
             => new Uri((string)json["assetIndex"]["url"]);
-
-        /*
+        
         public HashSet<Uri> libraries(JObject json)
         {
             HashSet<Uri> uris = new HashSet<Uri>();
             foreach (JObject i in (JArray)json["libraries"])
             {
                 uris.Add(new Uri((string)i["downloads"]["artifact"]["url"]));
+                if (i.ContainsKey("natives"))
+                {
+                    uris.Add(new Uri((string)i["download"]["classifiers"]["natives-windows"]["url"]));
+                }
             }
+            return uris;
         }
-        */
 
         public Uri loggerConf(JObject json)
         {

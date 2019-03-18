@@ -55,7 +55,7 @@ namespace wtfmc
         /// </summary>
         /// <param name="json">The json of a version.</param>
         /// <returns></returns>
-        List<Uri> libraries(JObject json);
+        HashSet<Uri> libraries(JObject json);
 
         /// <summary>
         /// Gives the path to a logger config file.
