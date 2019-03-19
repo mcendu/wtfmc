@@ -26,9 +26,9 @@ namespace wtfmc
         public async Task DownloadAsync(Download dl)
         {
             // Initialize variables
-            log.Info($"Downloading {dl.src.AbsoluteUri}");
-            Stream from = await hclient.GetStreamAsync(dl.src);
-            FileStream to = new FileStream(dl.path, FileMode.Create, FileAccess.ReadWrite);
+            log.Info($"Downloading {dl.Src.AbsoluteUri}");
+            Stream from = await hclient.GetStreamAsync(dl.Src);
+            FileStream to = new FileStream(dl.Path, FileMode.Create, FileAccess.ReadWrite);
             int readlen;
             byte[] buf = new byte[2048];
 
@@ -41,12 +41,12 @@ namespace wtfmc
             to.Position = 0;
 
             // Check the hash of the download
-            if (!Util.checkIntegrity(to, dl.hash))
+            if (!Util.checkIntegrity(to, dl.Hash))
             {
-                log.Error($"Failed to download {dl.src.AbsoluteUri}");
+                log.Error($"Failed to download {dl.Src.AbsoluteUri}");
                 throw new Exception(); // Fault the task
             }
-            log.Info($"Downloaded {dl.src.AbsoluteUri}");
+            log.Info($"Downloaded {dl.Src.AbsoluteUri}");
         }
     }
 
@@ -55,16 +55,17 @@ namespace wtfmc
     /// </summary>
     public class Download
     {
-        public readonly Uri src;
-        public readonly string path;
-        public readonly string hash;
-        // public readonly long length;
+        public Uri Src { get; }
+
+        public string Path { get; }
+
+        public string Hash { get; }
 
         public Download(Uri src, string path, string hash)
         {
-            this.src = src;
-            this.path = path;
-            this.hash = hash;
+            Src = src;
+            Path = path;
+            Hash = hash;
         }
 
         /// <summary>
@@ -74,7 +75,7 @@ namespace wtfmc
         {
             try
             {
-                return Util.checkIntegrity(File.Open(path, FileMode.Open), hash);
+                return Util.checkIntegrity(File.Open(Path, FileMode.Open), Hash);
             }
             catch (IOException)
             {

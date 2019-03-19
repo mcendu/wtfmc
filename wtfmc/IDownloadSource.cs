@@ -10,7 +10,7 @@ namespace wtfmc
     /// <summary>
     /// A source from which files are downloaded.
     /// </summary>
-    interface IDownloadSource
+    public interface IDownloadSource
     {
         /// <summary>
         /// Gives the path to version_manifest.json.
@@ -51,11 +51,18 @@ namespace wtfmc
         Uri assetsIndex(JObject json);
 
         /// <summary>
-        /// Gives a list of path to required libs.
+        /// Generate the path to a library.
         /// </summary>
         /// <param name="json">The json of a version.</param>
         /// <returns></returns>
-        HashSet<Uri> libraries(JObject json);
+        Uri library(JObject libDesc);
+
+        /// <summary>
+        /// Generate the path to a library native.
+        /// </summary>
+        /// <param name="json">The json of a version.</param>
+        /// <returns></returns>
+        Uri native(JObject libDesc);
 
         /// <summary>
         /// Gives the path to a logger config file.

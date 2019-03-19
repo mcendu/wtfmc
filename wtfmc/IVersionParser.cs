@@ -16,6 +16,11 @@ namespace wtfmc
         /// The version data.
         /// </summary>
         JObject Version { get; }
+
+        /// <summary>
+        /// The download source.
+        /// </summary>
+        IDownloadSource Source { get; set; }
         
         // Check files referenced in the
         // version json. The lack of both the
