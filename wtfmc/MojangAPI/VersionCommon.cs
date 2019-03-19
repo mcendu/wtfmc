@@ -64,25 +64,27 @@ namespace wtfmc.MojangAPI
             HashSet<Download> downloads = new HashSet<Download>();
             foreach (JObject i in Version["libraries"])
             {
-                rr.Execute(new Func<JObject>(() =>
+                rr.Execute(new Func<JArray>(() =>
                 {
                     if (i.ContainsKey("rules"))
-                        return (JObject)i["rules"];
+                        return (JArray)i["rules"];
                     return null;
                 })(),
                 () =>
                 {
-                    downloads.Add(new Download(
-                        Source.library(i),
-                        "libraries/" + (string)i["artifact"]["path"],
-                        (string)i["artifact"]["hash"]
-                        ));
                     if (i.ContainsKey("natives"))
                     {
                         downloads.Add(new Download(
                             Source.native(i),
                             "libraries/" + (string)i["classifiers"]["natives-windows"]["path"],
                             (string)i["classifiers"]["natives-windows"]["hash"]
+                            ));
+                    } else
+                    {
+                        downloads.Add(new Download(
+                            Source.library(i),
+                            "libraries/" + (string)i["artifact"]["path"],
+                            (string)i["artifact"]["hash"]
                             ));
                     }
                 });
@@ -101,10 +103,10 @@ namespace wtfmc.MojangAPI
             string classpath = "";
             foreach (JObject i in Version["libraries"])
             {
-                rr.Execute(new Func<JObject>(() =>
+                rr.Execute(new Func<JArray>(() =>
                 {
                     if (i.ContainsKey("rules"))
-                        return (JObject)i["rules"];
+                        return (JArray)i["rules"];
                     return null;
                 })(),
                 () =>
@@ -115,11 +117,6 @@ namespace wtfmc.MojangAPI
             }
             classpath += $"versions/{VID}/{VID}.jar";
             return classpath;
-        }
-
-        public void genLibraryDirectory()
-        {
-            throw new NotImplementedException();
         }
 
         public void unpackNatives()

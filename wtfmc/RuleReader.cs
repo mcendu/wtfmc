@@ -65,15 +65,24 @@ namespace wtfmc
             return true;
         }
 
-        public void Execute(JObject rule, Action action)
+        public void Execute(JArray rule, Action action)
         {
             if (rule == null)
-                action();
-            else
             {
-                if (Determine(rule))
-                    action();
+                action();
+                return;
             }
+            foreach (JObject i in rule)
+            {
+                if (Determine(i))
+                {
+                    if ((string)i["action"] == "allow")
+                        continue;
+                    else // "disallow", or invalid action
+                        return;
+                }
+            }
+            action();
         }
     }
 }
