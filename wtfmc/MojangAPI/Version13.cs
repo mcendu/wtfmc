@@ -8,6 +8,17 @@ using Newtonsoft.Json.Linq;
 
 namespace wtfmc.MojangAPI
 {
+    /// <summary>
+    /// Minecraft Java JSON format from 1.13.
+    /// Changes from the previous version (1.9) include:
+    /// * Minimal launcher version changed to 21 (from 18).
+    /// * No longer has a separate LWJGL build for macOS
+    /// * Arguments spec moved from minecraftArguments to arguments.game.
+    /// * Added another arg spec for JVM.
+    /// * Explicit specification of --demo and --width/--height.
+    /// * A new convention for libs with natives
+    /// ** One entry without natives, one with natives.
+    /// </summary>
     public sealed class Version13 : VersionCommon
     {
         public Version13(JObject vdata) : base(vdata)
@@ -70,6 +81,16 @@ namespace wtfmc.MojangAPI
                 });
             }
             checkFiles(downloads);
+        }
+
+        public override List<string> generateArgs()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override List<string> generateVMArgs()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -21,6 +21,11 @@ namespace wtfmc
         /// The download source.
         /// </summary>
         IDownloadSource Source { get; set; }
+
+        /// <summary>
+        /// Login data.
+        /// </summary>
+        ILoginClient Login { get; set; }
         
         // Check files referenced in the
         // version json. The lack of both the

@@ -23,11 +23,19 @@ namespace wtfmc.MojangAPI
             VID = (string)Version["id"];
         }
 
+        public string GameDir
+        {
+            get => Directory.GetCurrentDirectory();
+            set => Directory.SetCurrentDirectory(value);
+        }
+
         public JObject Version { get; }
 
         public string VID { get; }
 
         public IDownloadSource Source { get; set; }
+
+        public ILoginClient Login { get; set; }
 
         protected void checkFiles(IEnumerable<Download> filedata)
         {
@@ -42,19 +50,19 @@ namespace wtfmc.MojangAPI
                     {
                         Directory.CreateDirectory(d);
                     }
-                    if (new Func<bool>(() => {
-                        try
-                        {
-                            FileStream f = File.Open(i.Path, FileMode.Open);
-                            return Util.checkIntegrity(f, i.Hash);
-                        }
-                        catch (IOException)
-                        {
-                            return false;
-                        }
-                    })())
-                        dl.DownloadAsync(i).Wait();
                 }
+                if (new Func<bool>(() => {
+                    try
+                    {
+                        FileStream f = File.Open(i.Path, FileMode.Open);
+                        return Util.checkIntegrity(f, i.Hash);
+                    }
+                    catch (IOException)
+                    {
+                        return false;
+                    }
+                })())
+                    dl.DownloadAsync(i).Wait();
             }
         }
 
@@ -68,7 +76,14 @@ namespace wtfmc.MojangAPI
             throw new NotImplementedException();
         }
 
-        public abstract void checkAssetsIndex();
+        public void checkAssetsIndex()
+        {
+            Download[] dl = { new Download(Source.assetsIndex(Version),
+                $"assets/indexes/{(string)Version["assetIndex"]["id"]}",
+                (string)Version["assetIndex"]["hash"]) };
+            checkFiles(dl);
+        }
+
         public abstract void checkLibraries();
         public abstract string generateClasspath();
         public abstract List<string> generateArgs();
