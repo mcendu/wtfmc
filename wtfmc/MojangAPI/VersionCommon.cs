@@ -13,7 +13,7 @@ namespace wtfmc.MojangAPI
     /// are mosly consistent across
     /// versions.
     /// </summary>
-    abstract class VersionCommon : IVersionParser
+    public abstract class VersionCommon : IVersionParser
     {
         Downloader dl = new Downloader();
 
@@ -58,73 +58,19 @@ namespace wtfmc.MojangAPI
             }
         }
 
-        public void checkLibraries()
-        {
-            RuleReader rr = new RuleReader();
-            HashSet<Download> downloads = new HashSet<Download>();
-            foreach (JObject i in Version["libraries"])
-            {
-                rr.Execute(new Func<JArray>(() =>
-                {
-                    if (i.ContainsKey("rules"))
-                        return (JArray)i["rules"];
-                    return null;
-                })(),
-                () =>
-                {
-                    if (i.ContainsKey("natives"))
-                    {
-                        downloads.Add(new Download(
-                            Source.native(i),
-                            "libraries/" + (string)i["classifiers"]["natives-windows"]["path"],
-                            (string)i["classifiers"]["natives-windows"]["hash"]
-                            ));
-                    } else
-                    {
-                        downloads.Add(new Download(
-                            Source.library(i),
-                            "libraries/" + (string)i["artifact"]["path"],
-                            (string)i["artifact"]["hash"]
-                            ));
-                    }
-                });
-            }
-            checkFiles(downloads);
-        }
-
         public void checkClient()
         {
             throw new NotImplementedException();
         }
-
-        public string generateClasspath()
-        {
-            RuleReader rr = new RuleReader();
-            string classpath = "";
-            foreach (JObject i in Version["libraries"])
-            {
-                rr.Execute(new Func<JArray>(() =>
-                {
-                    if (i.ContainsKey("rules"))
-                        return (JArray)i["rules"];
-                    return null;
-                })(),
-                () =>
-                {
-                    if (!i.ContainsKey("natives"))
-                        classpath += Path.GetFullPath("libraries/" + (string)i["artifact"]["path"]) + ";";
-                });
-            }
-            classpath += $"versions/{VID}/{VID}.jar";
-            return classpath;
-        }
-
+        
         public void unpackNatives()
         {
             throw new NotImplementedException();
         }
 
-        public abstract void checkAssets();
+        public abstract void checkAssetsIndex();
+        public abstract void checkLibraries();
+        public abstract string generateClasspath();
         public abstract List<string> generateArgs();
         public abstract List<string> generateVMArgs();
     }

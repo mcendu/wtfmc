@@ -26,7 +26,7 @@ namespace wtfmc
         // version json. The lack of both the
         // file itself or the integrity would
         // cause it to be downloaded.
-        void checkAssets();
+        void checkAssetsIndex();
         void checkLibraries();
         void checkClient();
 
