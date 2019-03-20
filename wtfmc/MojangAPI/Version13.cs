@@ -12,7 +12,6 @@ namespace wtfmc.MojangAPI
     /// Minecraft Java JSON format from 1.13.
     /// Changes from the previous version (1.9) include:
     /// * Minimal launcher version changed to 21 (from 18).
-    /// * No longer has a separate LWJGL build for macOS
     /// * Arguments spec moved from minecraftArguments to arguments.game.
     /// * Added another arg spec for JVM.
     /// * Explicit specification of --demo and --width/--height.
