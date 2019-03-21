@@ -55,11 +55,12 @@
     <Compile Include="ILauncher.cs" />
     <Compile Include="ILoginClient.cs" />
     <Compile Include="IVersionParser.cs" />
+    <Compile Include="MojangAPI\Formatter.cs" />
     <Compile Include="MojangAPI\Launcher.cs" />
     <Compile Include="MojangAPI\MojangDl.cs" />
     <Compile Include="MojangAPI\MojangLogin.cs" />
     <Compile Include="MojangAPI\Offline.cs" />
-    <Compile Include="MojangAPI\Version13.cs" />
+    <Compile Include="MojangAPI\Version21.cs" />
     <Compile Include="MojangAPI\VersionCommon.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RuleReader.cs" />

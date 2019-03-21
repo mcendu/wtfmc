@@ -18,9 +18,9 @@ namespace wtfmc.MojangAPI
     /// * A new convention for libs with natives
     /// ** One entry without natives, one with natives.
     /// </summary>
-    public sealed class Version13 : VersionCommon
+    public sealed class Version21 : VersionCommon
     {
-        public Version13(JObject vdata) : base(vdata)
+        public Version21(JObject vdata) : base(vdata)
         {
 
         }
