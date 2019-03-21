@@ -39,7 +39,17 @@ namespace wtfmc
             return !(bool)data["selectedProfile"]["paid"];
         }
 
+        private bool HasCustomResolution()
+        {
+            if (Width == null || Height == null)
+                return false;
+            return true;
+        }
+
         public ILoginClient Login { get; set; }
+
+        public int? Width { get; set; }
+        public int? Height { get; set; }
 
         private bool Determine(JObject rule)
         {
@@ -59,8 +69,12 @@ namespace wtfmc
             {
                 JObject feats = (JObject)rule["features"];
                 if (feats.ContainsKey("is_demo_user"))
+                {
                     if ((bool)feats["is_demo_user"] != isDemo())
                         return false;
+                    if ((bool)feats["has_custom_resolution"] != HasCustomResolution())
+                        return false;
+                }
             }
             return true;
         }

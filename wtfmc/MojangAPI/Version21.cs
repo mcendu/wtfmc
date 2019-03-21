@@ -49,6 +49,7 @@ namespace wtfmc.MojangAPI
 
         public override void checkLibraries()
         {
+            string o = SetCD();
             RuleReader rr = new RuleReader();
             HashSet<Download> downloads = new HashSet<Download>();
             foreach (JObject i in Version["libraries"])
@@ -80,11 +81,12 @@ namespace wtfmc.MojangAPI
                 });
             }
             checkFiles(downloads);
+            Directory.SetCurrentDirectory(o);
         }
 
         public override List<string> generateArgs()
         {
-            throw new NotImplementedException();
+            JArray input = (JArray)Version["arguments"]["game"];
         }
 
         public override List<string> generateVMArgs()
