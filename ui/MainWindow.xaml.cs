@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using wtfmc;
 
 namespace wtf_kyhgzsh_minecraft_launcher
 {
@@ -20,12 +21,13 @@ namespace wtf_kyhgzsh_minecraft_launcher
     /// </summary>
     public partial class MainWindow : Window
     {
+
         public MainWindow()
         {
             InitializeComponent();
 
         }
-
+        bool play_way;
         private void way_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (way.SelectedIndex==0)
@@ -40,6 +42,12 @@ namespace wtf_kyhgzsh_minecraft_launcher
                 password.IsEnabled = true;
                 login.Content = "登陆";
             }
+
+        }
+
+        private void login_Click(object sender, RoutedEventArgs e)
+        {
+            ILoginClient
         }
     }
 }
