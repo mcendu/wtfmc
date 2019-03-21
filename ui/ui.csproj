@@ -94,7 +94,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="ico.png" />
+    <ProjectReference Include="..\wtfmc\wtfmc.csproj">
+      <Project>{50ebba22-6e72-4c7c-b6d6-c14a49d21b04}</Project>
+      <Name>wtfmc</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
