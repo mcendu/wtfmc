@@ -25,7 +25,7 @@ namespace wtf_kyhgzsh_minecraft_launcher
         public MainWindow()
         {
             InitializeComponent();
-
+            reset_java_Click()
         }
         bool play_way;
         private void way_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -35,19 +35,38 @@ namespace wtf_kyhgzsh_minecraft_launcher
                 access_show.Content = "用户名:";
                 password.IsEnabled = false;
                 login.Content = "传入";
+                play_way = true;
             }
             if (way.SelectedIndex == 1)
             {
                 access_show.Content = "账号:";
                 password.IsEnabled = true;
                 login.Content = "登陆";
+                play_way = false;
             }
 
         }
 
         private void login_Click(object sender, RoutedEventArgs e)
         {
-            ILoginClient
+        }
+        private void play_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void test_java_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void reset_java_Click(object sender, RoutedEventArgs e)
+        {
+            reset_java_Click();
+        }
+        private void reset_java_Click()
+        {
+            jvm.Text = Util.locateJava();
         }
     }
 }

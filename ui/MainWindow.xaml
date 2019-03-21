@@ -5,12 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:wtf_kyhgzsh_minecraft_launcher"
         mc:Ignorable="d"
-        Title="Minecraft Lancher by mcendu and skyhgzsh" Height="350" Width="525">
-    <Grid>
-        <TabControl HorizontalAlignment="Left" Height="319" VerticalAlignment="Top" Width="517">
+        Title="Minecraft Lancher by mcendu and skyhgzsh" Height="340" Width="290" IsEnabled="True" ResizeMode="NoResize">
+    <Grid Margin="0,0,0,0">
+        <TabControl HorizontalAlignment="Left" Height="310" VerticalAlignment="Top" Width="305" Margin="0,0,0,0">
             <TabItem Header="Minecraft 启动">
-                <Grid Background="#FFE5E5E5">
-                    <Image HorizontalAlignment="Left" Height="96" VerticalAlignment="Top" Width="96" Margin="10,10,0,0" Source="ico.png"/>
+                <Grid Background="#FFE5E5E5" Margin="0,0,21,0" RenderTransformOrigin="0.555,0.515">
+                    <Image HorizontalAlignment="Left" Height="96" VerticalAlignment="Top" Width="96" Margin="10,10,0,0" Source="..\ui\img\ico.png" IsEnabled="False" Stretch="None"/>
                     <Label Content="启动方式：" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="110,10,0,0"/>
                     <Label x:Name="access_show" Content="账号：" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="110,40,0,0"/>
                     <Label x:Name="password_show" Content="密码：" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="111,70,0,0"/>
@@ -20,15 +20,21 @@
                         <ComboBoxItem Content="盗版" HorizontalAlignment="Left" Width="118"/>
                         <ComboBoxItem Content="正版登录" HorizontalAlignment="Left" Width="118"/>
                     </ComboBox>
-                    <ListBox x:Name="run_version_setting" HorizontalAlignment="Left" Height="272" VerticalAlignment="Top" Width="100" Margin="401,10,0,0">
+                    <ListBox x:Name="run_version_setting" HorizontalAlignment="Left" Height="170" VerticalAlignment="Top" Width="96" Margin="10,111,0,0">
                         <ListBoxItem Content="ListBoxItem"/>
-
                     </ListBox>
-                    <Button x:Name="login" Content="登陆" HorizontalAlignment="Left" Margin="111,100,0,0" VerticalAlignment="Top" Width="159" Click="login_Click"/>
+                    <Button x:Name="login" Content="登陆" HorizontalAlignment="Left" Margin="110,100,0,0" VerticalAlignment="Top" Width="160" Click="login_Click"/>
+                    <Button x:Name="play" Content="开始游戏" HorizontalAlignment="Left" Margin="110,240,0,0" VerticalAlignment="Top" Width="160" Height="41" Click="play_Click"/>
+                    <Label x:Name="Lancher_show" Content="" HorizontalAlignment="Left" Margin="110,125,0,0" VerticalAlignment="Top" Height="111" Width="157"/>
                 </Grid>
             </TabItem>
-            <TabItem Header="Java">
-                <Grid Background="#FFE5E5E5"/>
+            <TabItem Header="Java" Loaded="TabItem_Loaded">
+                <Grid Background="#FFE5E5E5" Margin="0,0,0,0">
+                    <Label Content="JVM" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+                    <TextBox x:Name="jvm" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top" Width="260" Loaded="jvm_Loaded"/>
+                    <Button x:Name="test_java" Content="测试JVM路径" HorizontalAlignment="Left" Margin="10,254,0,0" VerticalAlignment="Top" Width="125" Click="test_java_Click"/>
+                    <Button x:Name="reset_java" Content="重置" HorizontalAlignment="Left" Margin="145,254,0,0" VerticalAlignment="Top" Width="125" Click="reset_java_Click"/>
+                </Grid>
             </TabItem>
             <TabItem Header="版本下载">
                 <Grid Background="#FFE5E5E5"/>
