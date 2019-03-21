@@ -23,10 +23,13 @@ namespace wtfmc.MojangAPI
             VID = (string)Version["id"];
         }
 
-        public string GameDir
+        public string GameDir { get; set; }
+
+        protected internal string SetCD()
         {
-            get => Directory.GetCurrentDirectory();
-            set => Directory.SetCurrentDirectory(value);
+            string ret = Directory.GetCurrentDirectory();
+            Directory.SetCurrentDirectory(GameDir);
+            return ret;
         }
 
         public JObject Version { get; }
@@ -78,10 +81,12 @@ namespace wtfmc.MojangAPI
 
         public void checkAssetsIndex()
         {
+            string o = SetCD();
             Download[] dl = { new Download(Source.assetsIndex(Version),
                 $"assets/indexes/{(string)Version["assetIndex"]["id"]}",
                 (string)Version["assetIndex"]["hash"]) };
             checkFiles(dl);
+            Directory.SetCurrentDirectory(o);
         }
 
         public abstract void checkLibraries();

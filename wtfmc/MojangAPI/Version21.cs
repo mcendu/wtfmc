@@ -18,9 +18,9 @@ namespace wtfmc.MojangAPI
     /// * A new convention for libs with natives
     /// ** One entry without natives, one with natives.
     /// </summary>
-    public sealed class Version13 : VersionCommon
+    public sealed class Version21 : VersionCommon
     {
-        public Version13(JObject vdata) : base(vdata)
+        public Version21(JObject vdata) : base(vdata)
         {
 
         }
@@ -49,6 +49,7 @@ namespace wtfmc.MojangAPI
 
         public override void checkLibraries()
         {
+            string o = SetCD();
             RuleReader rr = new RuleReader();
             HashSet<Download> downloads = new HashSet<Download>();
             foreach (JObject i in Version["libraries"])
@@ -80,11 +81,12 @@ namespace wtfmc.MojangAPI
                 });
             }
             checkFiles(downloads);
+            Directory.SetCurrentDirectory(o);
         }
 
         public override List<string> generateArgs()
         {
-            throw new NotImplementedException();
+            JArray input = (JArray)Version["arguments"]["game"];
         }
 
         public override List<string> generateVMArgs()
