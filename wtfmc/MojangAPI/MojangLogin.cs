@@ -116,7 +116,7 @@ namespace wtfmc.MojangAPI
             Data = AuthQuery("authenticate", new string[] { email, passwd }).Result;
         }
 
-        public bool CheckAvailable()
+        public static bool CheckAvailable()
         {
             HttpResponseMessage res;
             try

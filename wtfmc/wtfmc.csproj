@@ -55,6 +55,7 @@
     <Compile Include="IDownloadSource.cs" />
     <Compile Include="ILauncher.cs" />
     <Compile Include="ILoginClient.cs" />
+    <Compile Include="IProfile.cs" />
     <Compile Include="IVersionParser.cs" />
     <Compile Include="MojangAPI\Formatter.cs" />
     <Compile Include="MojangAPI\Launcher.cs" />

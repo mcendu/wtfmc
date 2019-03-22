@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -20,7 +21,7 @@ namespace wtfmc.MojangAPI
     /// </summary>
     public sealed class Version21 : VersionCommon
     {
-        public Version21(JObject vdata) : base(vdata)
+        public Version21(JObject vdata, IProfile profile) : base(vdata)
         {
 
         }
@@ -86,7 +87,22 @@ namespace wtfmc.MojangAPI
 
         public override List<string> generateArgs()
         {
+            throw new NotImplementedException();
+            List<string> result;
+            RuleReader rr = new RuleReader();
+            
+            rr.Login = Login;
+            // Apply default parameters.
             JArray input = (JArray)Version["arguments"]["game"];
+            foreach (JToken i in input)
+            {
+                if (i.HasValues)
+                {
+                    rr.Execute((JArray)i["rules"], () =>
+                    {
+                    });
+                }
+            }
         }
 
         public override List<string> generateVMArgs()

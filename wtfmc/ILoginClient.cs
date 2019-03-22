@@ -35,12 +35,6 @@ namespace wtfmc
         string Data { set; get; }
 
         /// <summary>
-        /// Check if the Login server is available.
-        /// </summary>
-        /// <returns>true if server is up, false otherwise.</returns>
-        bool CheckAvailable();
-
-        /// <summary>
         /// Authenticate with server with email & password.
         /// </summary>
         /// <param name="email">Email, or sometimes Legacy username.</param>
