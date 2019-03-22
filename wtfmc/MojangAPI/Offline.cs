@@ -21,7 +21,7 @@ namespace wtfmc.MojangAPI
 
         public string Data { get => Username; set => Username = value; }
 
-        public string AccessToken => null;
+        public string AccessToken => "00000000000000000000000000000000";
 
         public string ID { get; private set; }
 
@@ -38,11 +38,6 @@ namespace wtfmc.MojangAPI
             Username = email;
             new Random().NextBytes(id);
             ID = Util.bintohex(id);
-        }
-
-        public bool CheckAvailable()
-        {
-            return true;
         }
 
         public void LogOut()
