@@ -15,10 +15,6 @@ namespace wtfmc.MojangAPI
     {
         public MojangLogin()
         {
-            hclient = new HttpClient
-            {
-                BaseAddress = new Uri("https://authserver.mojang.com")
-            };
             ClientToken = "00000000000000000000000000000000";
         }
 
@@ -27,7 +23,10 @@ namespace wtfmc.MojangAPI
         public string ClientToken { get; private set; }
         public string Username { get; private set; }
         public string ID { get; private set; }
-        private readonly HttpClient hclient;
+        private static readonly HttpClient hclient = new HttpClient
+        {
+            BaseAddress = new Uri("https://authserver.mojang.com")
+        };
 
         public string LoginType => "mojang";
 
@@ -41,10 +40,11 @@ namespace wtfmc.MojangAPI
             {
                 rawdata = value;
                 JObject data = JObject.Parse(value);
+                string uid = (string)data["selectedUser"]["account"];
                 ClientToken = (string)data["clientToken"];
-                AccessToken = (string)data["accessToken"];
-                Username = (string)data["selectedProfile"]["name"];
-                ID = (string)data["selectedProfile"]["id"];
+                AccessToken = (string)data["authenticationDatabase"][uid]["accessToken"];
+                ID = (string)data["selectedUser"]["profile"];
+                Username = (string)data["authenticationDatabase"][uid]["profiles"][ID]["displayName"];
             }
         }
 
@@ -113,7 +113,8 @@ namespace wtfmc.MojangAPI
 
         public void Authenticate(string email, string passwd)
         {
-            Data = AuthQuery("authenticate", new string[] { email, passwd }).Result;
+            string serverFmt = AuthQuery("authenticate", new string[] { email, passwd }).Result;
+            Data = Serialize(JObject.Parse(serverFmt)).ToString();
         }
 
         public static bool CheckAvailable()
@@ -148,7 +149,8 @@ namespace wtfmc.MojangAPI
             }
             catch (BadAuthException)
             {
-                Data = AuthQuery("refresh").Result;
+                string serverFmt = AuthQuery("refresh").Result;
+                Data = Serialize(JObject.Parse(serverFmt)).ToString();
             }
         }
 
@@ -160,6 +162,42 @@ namespace wtfmc.MojangAPI
         private async Task<string> AuthQuery(string method)
         {
             return await AuthQuery(method, null);
+        }
+
+        /// <remarks>
+        /// Do not refer to this when implementing
+        /// ILoginClient.Serialize.
+        /// </remarks>
+        public JObject Serialize(JObject serverFmt)
+        {
+            JObject data = new JObject
+            {
+                { "authenticationDatabase", new JObject {
+                    { (string)serverFmt["user"]["id"], new JObject {
+                        { "accessToken", serverFmt["accessToken"] },
+                        { "username", serverFmt["user"]["username"] },
+                        { "properties", serverFmt["user"]["properties"] },
+                        { "profiles", new JObject
+                        {
+                            { (string)serverFmt["selectedProfile"]["id"], new JObject
+                            {
+                                { "displayName", serverFmt["selectedProfile"]["name"] }
+                            }
+                            }
+                        }
+                        }
+                    }
+                    }
+                }
+                },
+                { "clientToken", serverFmt["clientToken"] },
+                { "selectedUser", new JObject {
+                    { "account", serverFmt["user"]["id"] },
+                    { "profile", serverFmt["selectedProfile"]["id"] }
+                }
+                }
+            };
+            return data;
         }
     }
 }

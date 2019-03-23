@@ -25,7 +25,7 @@ namespace wtf_kyhgzsh_minecraft_launcher
         public MainWindow()
         {
             InitializeComponent();
-            reset_java_Click()
+            reset_java_Click();
         }
         bool play_way;
         private void way_SelectionChanged(object sender, SelectionChangedEventArgs e)

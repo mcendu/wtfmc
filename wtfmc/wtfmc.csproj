@@ -58,7 +58,6 @@
     <Compile Include="IProfile.cs" />
     <Compile Include="IVersionParser.cs" />
     <Compile Include="MojangAPI\Formatter.cs" />
-    <Compile Include="MojangAPI\Launcher.cs" />
     <Compile Include="MojangAPI\LauncherProfiles.cs" />
     <Compile Include="MojangAPI\MojangDl.cs" />
     <Compile Include="MojangAPI\MojangLogin.cs" />

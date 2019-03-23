@@ -16,7 +16,7 @@ namespace wtfmc
         /// <summary>
         /// The underlying JSON data.
         /// </summary>
-        JObject data { get; set; }
+        JObject Data { get; }
 
         /// <summary>
         /// The login data.
@@ -41,5 +41,10 @@ namespace wtfmc
         /// fied for some reason (not censorship).
         /// </remarks>
         bool EnableHistorical { get; set; }
+
+        /// <summary>
+        /// A list of profiles.
+        /// </summary>
+        List<IProfile> Profiles { get; set; }
     }
 }
