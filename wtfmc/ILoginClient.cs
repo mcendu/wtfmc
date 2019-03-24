@@ -36,11 +36,6 @@ namespace wtfmc
         JObject Data { set; get; }
 
         /// <summary>
-        /// Additional data stored at the root of launcher_profiles.json.
-        /// </summary>
-        JObject AdditionalData { get; set; }
-
-        /// <summary>
         /// Authenticate with server with email & password.
         /// </summary>
         /// <param name="email">Email, or sometimes Legacy username.</param>

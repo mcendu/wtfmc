@@ -17,15 +17,12 @@ namespace wtfmc.MojangAPI
         {
         }
 
-        private JObject adata;
-
         public string UID => (string)Data["userid"];
         public string AccessToken
-            => (string)AdditionalData["authenticationDatabase"][UID]["accessToken"];
-        public string ClientToken => (string)AdditionalData["clientToken"];
+            => (string)Data["accessToken"];
+        public string ClientToken { get; set; }
         public string ID => (string)Data["id"];
-        public string Username => (string)AdditionalData
-            ["authenticationDatabase"][UID]["profiles"][ID]["displayName"];
+        public string Username => (string)Data["displayName"];
 
         private static readonly HttpClient hclient = new HttpClient
         {
@@ -35,11 +32,6 @@ namespace wtfmc.MojangAPI
         public string LoginType => "mojang";
 
         public JObject Data { get; set; }
-
-        public JObject AdditionalData {
-            get => adata;
-            set => adata.Merge(value);
-        }
 
         /// <summary>
         /// Query the authentication server.
@@ -99,21 +91,15 @@ namespace wtfmc.MojangAPI
         private static void GenException(string errordata)
         {
             JObject jobj = JObject.Parse(errordata);
-            string err = jobj["error"].ToString();
-            string errdesc = jobj["errorMessage"].ToString();
+            string err = (string)jobj["error"];
+            string errdesc = (string)jobj["errorMessage"];
             throw new BadAuthException($"{err}: {errdesc}");
         }
 
         public void Authenticate(string email, string passwd)
         {
             JObject serverFmt = JObject.Parse(AuthQuery("authenticate", new string[] { email, passwd }).Result);
-            AdditionalData = Serialize(serverFmt);
-            Data = new JObject
-            {
-                { "authtype", LoginType },
-                { "userid", serverFmt["user"]["id"] },
-                { "id", serverFmt["selectedProfile"]["id"] }
-            };
+            Data = Serialize(serverFmt);
         }
 
         public static bool CheckAvailable()
@@ -149,7 +135,7 @@ namespace wtfmc.MojangAPI
             catch (BadAuthException)
             {
                 string serverFmt = AuthQuery("refresh").Result;
-                AdditionalData = Serialize(JObject.Parse(serverFmt));
+                Data["accessToken"] = JObject.Parse(serverFmt)["accessToken"];
             }
         }
 
@@ -171,30 +157,14 @@ namespace wtfmc.MojangAPI
         {
             JObject data = new JObject
             {
-                { "authenticationDatabase", new JObject {
-                    { (string)serverFmt["user"]["id"], new JObject {
-                        { "accessToken", serverFmt["accessToken"] },
-                        { "username", serverFmt["user"]["username"] },
-                        { "properties", serverFmt["user"]["properties"] },
-                        { "profiles", new JObject
-                        {
-                            { (string)serverFmt["selectedProfile"]["id"], new JObject
-                            {
-                                { "displayName", serverFmt["selectedProfile"]["name"] }
-                            }
-                            }
-                        }
-                        }
-                    }
-                    }
-                }
-                },
+                { "authtype", LoginType },
+                { "userid", serverFmt["user"]["id"] },
+                { "id", serverFmt["selectedProfile"]["id"] },
+                { "accessToken", serverFmt["accessToken"] },
+                { "username", serverFmt["user"]["username"] },
+                { "properties", serverFmt["user"]["properties"] },
+                { "displayName", serverFmt["selectedProfile"]["name"] },
                 { "clientToken", serverFmt["clientToken"] },
-                { "selectedUser", new JObject {
-                    { "account", serverFmt["user"]["id"] },
-                    { "profile", serverFmt["selectedProfile"]["id"] }
-                }
-                }
             };
             return data;
         }
