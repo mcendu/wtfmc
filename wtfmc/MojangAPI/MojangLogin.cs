@@ -15,14 +15,18 @@ namespace wtfmc.MojangAPI
     {
         public MojangLogin()
         {
-            ClientToken = "00000000000000000000000000000000";
         }
 
-        private string rawdata;
-        public string AccessToken { get; private set; }
-        public string ClientToken { get; private set; }
-        public string Username { get; private set; }
-        public string ID { get; private set; }
+        private JObject adata;
+
+        public string UID => (string)Data["userid"];
+        public string AccessToken
+            => (string)AdditionalData["authenticationDatabase"][UID]["accessToken"];
+        public string ClientToken => (string)AdditionalData["clientToken"];
+        public string ID => (string)Data["id"];
+        public string Username => (string)AdditionalData
+            ["authenticationDatabase"][UID]["profiles"][ID]["displayName"];
+
         private static readonly HttpClient hclient = new HttpClient
         {
             BaseAddress = new Uri("https://authserver.mojang.com")
@@ -30,22 +34,11 @@ namespace wtfmc.MojangAPI
 
         public string LoginType => "mojang";
 
-        public string Data
-        {
-            get
-            {
-                return rawdata;
-            }
-            set
-            {
-                rawdata = value;
-                JObject data = JObject.Parse(value);
-                string uid = (string)data["selectedUser"]["account"];
-                ClientToken = (string)data["clientToken"];
-                AccessToken = (string)data["authenticationDatabase"][uid]["accessToken"];
-                ID = (string)data["selectedUser"]["profile"];
-                Username = (string)data["authenticationDatabase"][uid]["profiles"][ID]["displayName"];
-            }
+        public JObject Data { get; set; }
+
+        public JObject AdditionalData {
+            get => adata;
+            set => adata.Merge(value);
         }
 
         /// <summary>
@@ -113,8 +106,14 @@ namespace wtfmc.MojangAPI
 
         public void Authenticate(string email, string passwd)
         {
-            string serverFmt = AuthQuery("authenticate", new string[] { email, passwd }).Result;
-            Data = Serialize(JObject.Parse(serverFmt)).ToString();
+            JObject serverFmt = JObject.Parse(AuthQuery("authenticate", new string[] { email, passwd }).Result);
+            AdditionalData = Serialize(serverFmt);
+            Data = new JObject
+            {
+                { "authtype", LoginType },
+                { "userid", serverFmt["user"]["id"] },
+                { "id", serverFmt["selectedProfile"]["id"] }
+            };
         }
 
         public static bool CheckAvailable()
@@ -150,7 +149,7 @@ namespace wtfmc.MojangAPI
             catch (BadAuthException)
             {
                 string serverFmt = AuthQuery("refresh").Result;
-                Data = Serialize(JObject.Parse(serverFmt)).ToString();
+                AdditionalData = Serialize(JObject.Parse(serverFmt));
             }
         }
 

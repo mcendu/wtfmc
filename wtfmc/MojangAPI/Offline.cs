@@ -1,43 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 
 namespace wtfmc.MojangAPI
 {
-    /// <summary>
-    /// Offline mode login.
-    /// </summary>
-    class Offline : ILoginClient
+    public sealed class Offline : ILoginClient
     {
-        public Offline()
-        {
-
-        }
-
-        public string Username { get; private set; }
-
-        public string Data { get => Username; set => Username = value; }
+        public string LoginType => "offline";
 
         public string AccessToken => "00000000000000000000000000000000";
 
-        public string ID { get; private set; }
+        public string Username => (string)Data["username"];
 
-        public string LoginType => "offline";
+        public string ID => (string)Data["id"];
 
-        /// <summary>
-        /// Dump username to Data.
-        /// </summary>
-        /// <param name="email">Username.</param>
-        /// <param name="passwd">Never used, should always be null.</param>
+        public JObject Data { get; set; }
+        public JObject AdditionalData { get => null; set { } }
+
         public void Authenticate(string email, string passwd)
         {
-            byte[] id = new byte[16];
-            Username = email;
-            new Random().NextBytes(id);
-            ID = Util.bintohex(id);
+            byte[] i = new byte[16];
+            new System.Security.Cryptography.RNGCryptoServiceProvider().GetBytes(i);
+            Data = new JObject
+            {
+                { "authtype", LoginType },
+                { "username", email },
+                { "id", Util.bintohex(i) }
+            };
         }
 
         public void LogOut()

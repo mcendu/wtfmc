@@ -35,7 +35,7 @@ namespace wtfmc
         {
             if (Login.LoginType != "mojang")
                 return false;
-            JObject data = JObject.Parse(Login.Data);
+            JObject data = Login.Data;
             return !(bool)data["selectedProfile"]["paid"];
         }
 

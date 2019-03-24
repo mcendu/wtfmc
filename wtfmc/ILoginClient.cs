@@ -2,6 +2,7 @@
  * By McEndu and skyhgzsh
  * Copyright (C) 2019 MIT License
  */
+using Newtonsoft.Json.Linq;
 using System;
 using System.Threading.Tasks;
 
@@ -32,7 +33,12 @@ namespace wtfmc
         /// <summary>
         /// Raw login data.
         /// </summary>
-        string Data { set; get; }
+        JObject Data { set; get; }
+
+        /// <summary>
+        /// Additional data stored at the root of launcher_profiles.json.
+        /// </summary>
+        JObject AdditionalData { get; set; }
 
         /// <summary>
         /// Authenticate with server with email & password.
