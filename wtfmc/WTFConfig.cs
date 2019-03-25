@@ -43,7 +43,7 @@ namespace wtfmc
         /// <summary>
         /// A list of profiles by ID.
         /// </summary>
-        public Dictionary<string, IProfile> Profiles { get; set; }
+        public Dictionary<string, Profile> Profiles { get; set; }
 
         /// <summary>
         /// A list of accounts.

@@ -48,9 +48,8 @@ namespace wtfmc
         /// <returns>The absolute path to the JVM.</returns>
         public static string locateJava()
         {
+            // look for base directory.
             string baseSPath;
-            int selMajV = 0;
-            int selSubV = 0;
             string selPath = null;
             if (Directory.Exists("C:\\Program Files\\Java"))
             {
@@ -62,65 +61,59 @@ namespace wtfmc
             }
             else
                 return null;
-            IEnumerable<string> sDirs = Directory.EnumerateFiles(baseSPath);
-            foreach (string i in sDirs)
+
+            // Linq discover Java versions.
+            IEnumerable<Tuple<short, short, string>> jvmlist = GetJavaVersion(Directory.EnumerateDirectories(baseSPath));
+            // Find Java 8s.
+            var j8s = from jvm in jvmlist
+                      where jvm.Item1 == 8
+                      orderby jvm.Item2 descending
+                      select jvm;
+            if (j8s.Count() > 0)
             {
-                // Match Java 8
-                Match mSubV = Regex.Match(i, @"(?=j(dk|re)1\.8\.0_)\d");
+                selPath = j8s.First().Item3;
+            }
+            else
+            {
+                j8s = from jvm in jvmlist
+                      orderby jvm.Item2 descending
+                      select jvm;
+
+                if (j8s.Count() > 0)
+                {
+                    selPath = j8s.First().Item3;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+
+            return selPath + @"\bin\javaw.exe";
+        }
+
+        static IEnumerable<Tuple<short, short, string>> GetJavaVersion(IEnumerable<string> names)
+        {
+            foreach (string name in names)
+            {
+                // Match older Java
+                Match mSubV = Regex.Match(name, @"j(dk|re)1\.(?<major>\d)\.\d_(?<minor>\d)");
                 if (mSubV.Success)
                 {
-                    short subV = short.Parse(mSubV.Value);
-                    if (subV > selSubV)
-                    {
-                        selSubV = subV;
-                        selPath = i;
-                    }
-                    continue;
+                    short majV = short.Parse(mSubV.Groups["major"].Value);
+                    short subV = short.Parse(mSubV.Groups["minor"].Value);
+                    yield return new Tuple<short, short, string>(majV, subV, name);
                 }
 
                 // Match newer Java
-                mSubV = Regex.Match(i, @"(?=j(dk|re)-(?<major>\d)\.\d\.)\d");
+                mSubV = Regex.Match(name, @"j(dk|re)-(?<major>\d)\.\d\.(?<minor>\d)");
                 if (mSubV.Success)
                 {
                     short majV = short.Parse(mSubV.Groups["major"].Value);
-                    short subV = short.Parse(mSubV.Value);
-                    if (selMajV != 8 && majV > selMajV)
-                    {
-                        selMajV = majV;
-                        selSubV = subV;
-                        selPath = i;
-                        continue;
-                    }
-                    else if (subV > selSubV)
-                    {
-                        selSubV = subV;
-                        selPath = i;
-                    }
-                    continue;
-                }
-
-                // Match older Java
-                mSubV = Regex.Match(i, @"(?=j(dk|re)(1\.(?<major>\d)\.\d_)\d");
-                if (mSubV.Success)
-                {
-                    short majV = short.Parse(mSubV.Groups["major"].Value);
-                    short subV = short.Parse(mSubV.Value);
-                    if (majV > selMajV)
-                    {
-                        selMajV = majV;
-                        selSubV = subV;
-                        selPath = i;
-                        continue;
-                    }
-                    else if (subV > selSubV)
-                    {
-                        selSubV = subV;
-                        selPath = i;
-                    }
-                    continue;
+                    short subV = short.Parse(mSubV.Groups["minor"].Value);
+                    yield return new Tuple<short, short, string>(majV, subV, name);
                 }
             }
-            return selPath + @"\bin\javaw.exe";
         }
     }
 }
