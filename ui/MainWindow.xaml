@@ -30,10 +30,14 @@
             </TabItem>
             <TabItem Header="Java" Loaded="TabItem_Loaded">
                 <Grid Background="#FFE5E5E5" Margin="0,0,0,0">
-                    <Label Content="JVM" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-                    <TextBox x:Name="jvm" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top" Width="260" Loaded="jvm_Loaded"/>
+                    <Label Content="JVM" HorizontalAlignment="Left" Margin="10,55,0,0" VerticalAlignment="Top"/>
+                    <TextBox x:Name="jvm" HorizontalAlignment="Left" Margin="10,80,0,0" VerticalAlignment="Top" Width="260" Loaded="jvm_Loaded"/>
                     <Button x:Name="test_java" Content="测试JVM路径" HorizontalAlignment="Left" Margin="10,254,0,0" VerticalAlignment="Top" Width="125" Click="test_java_Click"/>
                     <Button x:Name="reset_java" Content="重置" HorizontalAlignment="Left" Margin="145,254,0,0" VerticalAlignment="Top" Width="125" Click="reset_java_Click"/>
+                    <Label Content="名称" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+                    <TextBox x:Name="jvm_Copy" HorizontalAlignment="Left" Margin="10,35,0,0" VerticalAlignment="Top" Width="120" Loaded="jvm_Loaded"/>
+                    <Label Content="版本" HorizontalAlignment="Left" Margin="145,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="4.942,-2.99"/>
+                    <ComboBox HorizontalAlignment="Left" Margin="150,35,0,0" VerticalAlignment="Top" Width="120" Height="17"/>
                 </Grid>
             </TabItem>
             <TabItem Header="版本下载">
