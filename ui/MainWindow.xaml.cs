@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -39,7 +37,7 @@ namespace wtf_kyhgzsh_minecraft_launcher
                 login.Content = "传入";
                 play_way = true;
             }
-            else if (way.SelectedIndex == 1)
+            if (way.SelectedIndex == 1)
             {
                 access_show.Content = "账号:";
                 password.IsEnabled = true;
@@ -51,9 +49,7 @@ namespace wtf_kyhgzsh_minecraft_launcher
 
         private void login_Click(object sender, RoutedEventArgs e)
         {
-
         }
-
         private void play_Click(object sender, RoutedEventArgs e)
         {
 
@@ -61,25 +57,12 @@ namespace wtf_kyhgzsh_minecraft_launcher
 
         private void test_java_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                string procname = jvm.Text;
-                string args = "-h";
-                Process p = new Process();
-                p.StartInfo.FileName = procname;
-                p.StartInfo.Arguments = args;
-                p.Start();
-            }
-            catch (Exception err)
-            {
-                (sender as Button).Content = "测试：" + err.Message;
-            }
-            (sender as Button).Content = "测试：OK";
+
         }
 
         private void reset_java_Click(object sender, RoutedEventArgs e)
         {
-            
+            reset_java_Click();
         }
         private void reset_java_Click()
         {
