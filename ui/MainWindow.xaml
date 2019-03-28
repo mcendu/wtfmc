@@ -5,43 +5,70 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:wtf_kyhgzsh_minecraft_launcher"
         mc:Ignorable="d"
-        Title="Minecraft Lancher by mcendu and skyhgzsh" Height="340" Width="290" IsEnabled="True" ResizeMode="NoResize">
+        Title="Minecraft Lancher by mcendu and skyhgzsh" Height="375.826" Width="290" IsEnabled="True" ResizeMode="NoResize">
     <Grid Margin="0,0,0,0">
-        <TabControl HorizontalAlignment="Left" Height="310" VerticalAlignment="Top" Width="305" Margin="0,0,0,0">
+        <TabControl Margin="0,0,0,0">
             <TabItem Header="Minecraft 启动">
-                <Grid Background="#FFE5E5E5" Margin="0,0,21,0" RenderTransformOrigin="0.555,0.515">
+                <Grid Background="#FFE5E5E5" RenderTransformOrigin="0.555,0.515">
                     <Image HorizontalAlignment="Left" Height="96" VerticalAlignment="Top" Width="96" Margin="10,10,0,0" Source="..\ui\img\ico.png" IsEnabled="False" Stretch="None"/>
                     <Label Content="启动方式：" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="110,10,0,0"/>
                     <Label x:Name="access_show" Content="账号：" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="110,40,0,0"/>
                     <Label x:Name="password_show" Content="密码：" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="111,70,0,0"/>
                     <PasswordBox x:Name="password" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="170,75,0,0" Width="100" IsEnabled="False"/>
                     <TextBox x:Name="access" HorizontalAlignment="Left" Height="18" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" Margin="170,45,0,0"/>
+                    <Button x:Name="login" Content="登陆" HorizontalAlignment="Left" Margin="110,100,0,0" VerticalAlignment="Top" Width="160" Click="login_Click"/>
                     <ComboBox x:Name="way" HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Margin="180,14,0,0" IsReadOnly="True" SelectedIndex="1" SelectionChanged="way_SelectionChanged">
                         <ComboBoxItem Content="盗版" HorizontalAlignment="Left" Width="118"/>
                         <ComboBoxItem Content="正版登录" HorizontalAlignment="Left" Width="118"/>
                     </ComboBox>
-                    <ListBox x:Name="run_version_setting" HorizontalAlignment="Left" Height="170" VerticalAlignment="Top" Width="96" Margin="10,111,0,0">
+                    <ListBox x:Name="run_version_setting" HorizontalAlignment="Left" Height="199" VerticalAlignment="Top" Width="96" Margin="10,111,0,0">
                         <ListBoxItem Content="ListBoxItem"/>
                     </ListBox>
-                    <Button x:Name="login" Content="登陆" HorizontalAlignment="Left" Margin="110,100,0,0" VerticalAlignment="Top" Width="160" Click="login_Click"/>
-                    <Button x:Name="play" Content="开始游戏" HorizontalAlignment="Left" Margin="110,240,0,0" VerticalAlignment="Top" Width="160" Height="41" Click="play_Click"/>
-                    <Label x:Name="Lancher_show" Content="" HorizontalAlignment="Left" Margin="110,125,0,0" VerticalAlignment="Top" Height="111" Width="157"/>
+                    <Button x:Name="play" Content="开始游戏" HorizontalAlignment="Left" Margin="110,269,0,0" VerticalAlignment="Top" Width="160" Height="41" Click="play_Click"/>
                 </Grid>
             </TabItem>
-            <TabItem Header="Java" Loaded="TabItem_Loaded">
-                <Grid Background="#FFE5E5E5" Margin="0,0,0,0">
-                    <Label Content="JVM" HorizontalAlignment="Left" Margin="10,55,0,0" VerticalAlignment="Top"/>
-                    <TextBox x:Name="jvm" HorizontalAlignment="Left" Margin="10,80,0,0" VerticalAlignment="Top" Width="260" Loaded="jvm_Loaded"/>
-                    <Button x:Name="test_java" Content="测试JVM路径" HorizontalAlignment="Left" Margin="10,254,0,0" VerticalAlignment="Top" Width="125" Click="test_java_Click"/>
-                    <Button x:Name="reset_java" Content="重置" HorizontalAlignment="Left" Margin="145,254,0,0" VerticalAlignment="Top" Width="125" Click="reset_java_Click"/>
-                    <Label Content="名称" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-                    <TextBox x:Name="jvm_Copy" HorizontalAlignment="Left" Margin="10,35,0,0" VerticalAlignment="Top" Width="120" Loaded="jvm_Loaded"/>
-                    <Label Content="版本" HorizontalAlignment="Left" Margin="145,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="4.942,-2.99"/>
-                    <ComboBox HorizontalAlignment="Left" Margin="150,35,0,0" VerticalAlignment="Top" Width="120" Height="17"/>
+            <TabItem Header="设置">
+                <Grid Background="#FFE5E5E5" Margin="0,0,-1,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
+                    <Label Content="JVM" HorizontalAlignment="Left" Margin="4,0" Grid.Row="2" Padding="4" VerticalContentAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBox x:Name="jvm" Margin="4,0" VerticalAlignment="Center" Grid.Row="3" Grid.ColumnSpan="2"/>
+                    <Button x:Name="test_java" Content="测试" Margin="4" VerticalAlignment="Center" Click="test_java_Click" Grid.Row="9" Grid.Column="1"/>
+                    <Button x:Name="reset_java" Content="重置" Margin="4" Click="reset_java_Click" Grid.Row="9" VerticalAlignment="Center"/>
+                    <Label Content="名称" HorizontalAlignment="Left" Margin="4,0,0,0" Padding="4" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                    <TextBox x:Name="jvm_Copy" Margin="4,0" VerticalAlignment="Center" Grid.Row="1" VerticalContentAlignment="Stretch"/>
+                    <Label Content="版本" HorizontalAlignment="Left" Margin="4,0,0,0" VerticalAlignment="Center" RenderTransformOrigin="4.942,-2.99" Grid.Column="1" Padding="4" VerticalContentAlignment="Center"/>
+                    <ComboBox Margin="4" VerticalAlignment="Center" Grid.Row="1" Grid.Column="1" Padding="4" VerticalContentAlignment="Center"/>
+                    <Label Content="启动器选项" HorizontalAlignment="Left" Margin="4,0,0,0" VerticalAlignment="Center" Grid.Row="4"/>
+                    <TextBox x:Name="launch_setting" Margin="4,0" VerticalAlignment="Center" Grid.Row="5" Grid.ColumnSpan="2"/>
+                    <Label Content="分辨率" HorizontalAlignment="Left" Margin="4,0,0,0" Grid.Row="6" VerticalContentAlignment="Stretch" Padding="4,0,0,0" VerticalAlignment="Center"/>
+                    <Button x:Name="save" Content="保存" Margin="4" VerticalAlignment="Center" Click="reset_java_Click" Grid.Row="10" Grid.ColumnSpan="2"/>
+                    <Grid Grid.ColumnSpan="2" Margin="0" Grid.Row="7">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="5*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="5*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Content="x" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <TextBox x:Name="launch_setting_Copy" Margin="4" VerticalAlignment="Center" Padding="4" VerticalContentAlignment="Center"/>
+                        <TextBox x:Name="launch_setting_Copy1" Margin="4" VerticalAlignment="Center" Padding="4" VerticalContentAlignment="Center" Grid.Column="2"/>
+                    </Grid>
                 </Grid>
-            </TabItem>
-            <TabItem Header="版本下载">
-                <Grid Background="#FFE5E5E5"/>
             </TabItem>
             <TabItem Header="关于">
                 <Grid Background="#FFE5E5E5"/>
