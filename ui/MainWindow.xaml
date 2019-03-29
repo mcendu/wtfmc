@@ -5,26 +5,41 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:wtf_kyhgzsh_minecraft_launcher"
         mc:Ignorable="d"
-        Title="Minecraft Lancher by mcendu and skyhgzsh" Height="375.826" Width="290" IsEnabled="True" ResizeMode="NoResize">
-    <Grid Margin="0,0,0,0">
+        Title="WTFMC Reference GUI" Height="640" Width="480" IsEnabled="True" ResizeMode="NoResize">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="85*"/>
+            <RowDefinition Height="15*"/>
+        </Grid.RowDefinitions>
         <TabControl Margin="0,0,0,0">
             <TabItem Header="Minecraft 启动">
                 <Grid Background="#FFE5E5E5" RenderTransformOrigin="0.555,0.515">
-                    <Image HorizontalAlignment="Left" Height="96" VerticalAlignment="Top" Width="96" Margin="10,10,0,0" Source="..\ui\img\ico.png" IsEnabled="False" Stretch="None"/>
-                    <Label Content="启动方式：" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="110,10,0,0"/>
-                    <Label x:Name="access_show" Content="账号：" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="110,40,0,0"/>
-                    <Label x:Name="password_show" Content="密码：" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="111,70,0,0"/>
-                    <PasswordBox x:Name="password" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="170,75,0,0" Width="100" IsEnabled="False"/>
-                    <TextBox x:Name="access" HorizontalAlignment="Left" Height="18" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" Margin="170,45,0,0"/>
-                    <Button x:Name="login" Content="登陆" HorizontalAlignment="Left" Margin="110,100,0,0" VerticalAlignment="Top" Width="160" Click="login_Click"/>
-                    <ComboBox x:Name="way" HorizontalAlignment="Left" VerticalAlignment="Top" Width="90" Margin="180,14,0,0" IsReadOnly="True" SelectedIndex="1" SelectionChanged="way_SelectionChanged">
-                        <ComboBoxItem Content="盗版" HorizontalAlignment="Left" Width="118"/>
-                        <ComboBoxItem Content="正版登录" HorizontalAlignment="Left" Width="118"/>
-                    </ComboBox>
-                    <ListBox x:Name="run_version_setting" HorizontalAlignment="Left" Height="199" VerticalAlignment="Top" Width="96" Margin="10,111,0,0">
-                        <ListBoxItem Content="ListBoxItem"/>
-                    </ListBox>
-                    <Button x:Name="play" Content="开始游戏" HorizontalAlignment="Left" Margin="110,269,0,0" VerticalAlignment="Top" Width="160" Height="41" Click="play_Click"/>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40*"/>
+                        <RowDefinition Height="83*"/>
+                    </Grid.RowDefinitions>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="4*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Content="登录方式" Margin="4,0" VerticalAlignment="Center"/>
+                        <Label x:Name="access_show" Content="邮箱/用户名" Margin="4,0" VerticalAlignment="Center" Grid.Row="1"/>
+                        <Label x:Name="password_show" Content="密码" Margin="4,0" VerticalAlignment="Center" Grid.Row="2"/>
+                        <TextBox x:Name="access" HorizontalAlignment="Stretch" Height="18" TextWrapping="NoWrap" VerticalAlignment="Center" Margin="10,0" Grid.Column="1" Grid.Row="1"/>
+                        <PasswordBox x:Name="password" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="10,0" IsEnabled="False" Grid.Column="1" Grid.Row="2"/>
+                        <ComboBox x:Name="way" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="10,0" IsReadOnly="True" SelectedIndex="0" SelectionChanged="way_SelectionChanged" Grid.Column="1">
+                            <ComboBoxItem Content="离线模式" HorizontalAlignment="Left"/>
+                            <ComboBoxItem Content="正版登录" HorizontalAlignment="Left"/>
+                        </ComboBox>
+                        <Button x:Name="login" Content="登陆" HorizontalAlignment="Stretch" Margin="10,0" VerticalAlignment="Center" Click="login_Click" Grid.ColumnSpan="2" Grid.Row="3"/>
+                    </Grid>
                 </Grid>
             </TabItem>
             <TabItem Header="设置">
@@ -34,17 +49,17 @@
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <Label Content="JVM" HorizontalAlignment="Left" Margin="4,0" Grid.Row="2" Padding="4" VerticalContentAlignment="Center" VerticalAlignment="Center"/>
                     <TextBox x:Name="jvm" Margin="4,0" VerticalAlignment="Center" Grid.Row="3" Grid.ColumnSpan="2"/>
@@ -56,7 +71,7 @@
                     <ComboBox Margin="4" VerticalAlignment="Center" Grid.Row="1" Grid.Column="1" Padding="4" VerticalContentAlignment="Center"/>
                     <Label Content="启动器选项" HorizontalAlignment="Left" Margin="4,0,0,0" VerticalAlignment="Center" Grid.Row="4"/>
                     <TextBox x:Name="launch_setting" Margin="4,0" VerticalAlignment="Center" Grid.Row="5" Grid.ColumnSpan="2"/>
-                    <Label Content="分辨率" HorizontalAlignment="Left" Margin="4,0,0,0" Grid.Row="6" VerticalContentAlignment="Stretch" Padding="4,0,0,0" VerticalAlignment="Center"/>
+                    <Label Content="分辨率" HorizontalAlignment="Left" Margin="4,0,0,0" Grid.Row="6" VerticalAlignment="Center"/>
                     <Button x:Name="save" Content="保存" Margin="4" VerticalAlignment="Center" Click="reset_java_Click" Grid.Row="10" Grid.ColumnSpan="2"/>
                     <Grid Grid.ColumnSpan="2" Margin="0" Grid.Row="7">
                         <Grid.ColumnDefinitions>
@@ -74,5 +89,13 @@
                 <Grid Background="#FFE5E5E5"/>
             </TabItem>
         </TabControl>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+            <ComboBox x:Name="profile" Margin="10" VerticalContentAlignment="Center" VerticalAlignment="Center" MinHeight="30"/>
+            <Button x:Name="play" Content="开始游戏" Margin="10" Click="play_Click" Grid.Column="2" FontSize="20pt"/>
+        </Grid>
     </Grid>
 </Window>
