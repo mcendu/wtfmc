@@ -13,16 +13,6 @@ namespace wtfmc
     public interface IVersionParser {
 
         /// <summary>
-        /// The version data.
-        /// </summary>
-        JObject Version { get; }
-
-        /// <summary>
-        /// The download source.
-        /// </summary>
-        IDownloadSource Source { get; set; }
-
-        /// <summary>
         /// Login data.
         /// </summary>
         ILoginClient Login { get; set; }
@@ -31,29 +21,29 @@ namespace wtfmc
         // version json. The lack of both the
         // file itself or the integrity would
         // cause it to be downloaded.
-        void checkAssetsIndex();
-        void checkLibraries();
-        void checkClient();
+        void CheckAssetsIndex();
+        void CheckLibraries();
+        void CheckClient();
 
         /// <summary>
         /// Generate the value for the -cp option.
         /// </summary>
         /// <returns>A comma-separated list of jars.</returns>
-        string generateClasspath();
+        string GenerateClasspath();
 
         /// <summary>
         /// Unpack natives.
         /// </summary>
-        void unpackNatives();
+        void UnpackNatives();
 
         /// <summary>
         /// Generate command line arguments for game.
         /// </summary>
-        List<string> generateArgs();
+        List<string> GenerateArgs();
 
         /// <summary>
         /// Generate command line arguments for JVM.
         /// </summary>
-        List<string> generateVMArgs();
+        List<string> GenerateVMArgs();
     }
 }

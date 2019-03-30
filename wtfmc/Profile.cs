@@ -51,7 +51,7 @@ namespace wtfmc
         public string JVMArgs { get; set; }
 
         /// <summary>
-        /// The place where game files are actually
+        /// The place where game files are
         /// placed.
         /// </summary>
         public string GameDir { get; set; }

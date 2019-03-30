@@ -10,20 +10,16 @@ using log4net;
 
 namespace wtfmc
 {
-    public class Downloader
+    public static class Downloader
     {
-        private readonly HttpClient hclient = new HttpClient();
+        public static readonly HttpClient hclient = new HttpClient();
         private static readonly ILog log = LogManager.GetLogger(typeof(Downloader));
-        
-        public Downloader()
-        {
-        }
 
         /// <summary>
         /// Download a file.
         /// </summary>
         /// <param name="dl">The download data.</param>
-        public async Task DownloadAsync(Download dl)
+        public static async Task DownloadAsync(Download dl)
         {
             // Initialize variables
             log.Info($"Downloading {dl.Src.AbsoluteUri}");
@@ -64,6 +60,13 @@ namespace wtfmc
         public Download(Uri src, string path, string hash)
         {
             Src = src;
+            Path = path;
+            Hash = hash;
+        }
+
+        public Download(string src, string path, string hash)
+        {
+            Src = new Uri(src);
             Path = path;
             Hash = hash;
         }

@@ -19,18 +19,21 @@ namespace wtfmc.MojangAPI
     /// * A new convention for libs with natives
     /// ** One entry without natives, one with natives.
     /// </summary>
-    public sealed class Version21 : VersionCommon
+    public sealed class Version21 : Version
     {
         public Version21(JObject vdata, IProfile profile) : base(vdata)
         {
-
         }
 
-        public override string generateClasspath()
+        public Version21(JObject vdata) : base(vdata)
+        {
+        }
+
+        public override string GenerateClasspath()
         {
             RuleReader rr = new RuleReader();
             string classpath = "";
-            foreach (JObject i in Version["libraries"])
+            foreach (JObject i in vdata["libraries"])
             {
                 rr.Execute(new Func<JArray>(() =>
                 {
@@ -48,12 +51,12 @@ namespace wtfmc.MojangAPI
             return classpath;
         }
 
-        public override void checkLibraries()
+        public override void CheckLibraries()
         {
             string o = SetCD();
             RuleReader rr = new RuleReader();
             HashSet<Download> downloads = new HashSet<Download>();
-            foreach (JObject i in Version["libraries"])
+            foreach (JObject i in vdata["libraries"])
             {
                 rr.Execute(new Func<JArray>(() =>
                 {
@@ -66,7 +69,7 @@ namespace wtfmc.MojangAPI
                     if (i.ContainsKey("natives"))
                     {
                         downloads.Add(new Download(
-                            Source.native(i),
+                            (string)i["classifiers"]["natives-windows"]["url"],
                             "libraries/" + (string)i["classifiers"]["natives-windows"]["path"],
                             (string)i["classifiers"]["natives-windows"]["hash"]
                             ));
@@ -74,18 +77,18 @@ namespace wtfmc.MojangAPI
                     else
                     {
                         downloads.Add(new Download(
-                            Source.library(i),
+                            (string)i["artifact"]["url"],
                             "libraries/" + (string)i["artifact"]["path"],
                             (string)i["artifact"]["hash"]
                             ));
                     }
                 });
             }
-            checkFiles(downloads);
+            CheckFiles(downloads);
             Directory.SetCurrentDirectory(o);
         }
 
-        public override List<string> generateArgs()
+        public override List<string> GenerateArgs()
         {
             throw new NotImplementedException();
             List<string> result;
@@ -93,7 +96,7 @@ namespace wtfmc.MojangAPI
             
             rr.Login = Login;
             // Apply default parameters.
-            JArray input = (JArray)Version["arguments"]["game"];
+            JArray input = (JArray)vdata["arguments"]["game"];
             foreach (JToken i in input)
             {
                 if (i.HasValues)
@@ -105,7 +108,7 @@ namespace wtfmc.MojangAPI
             }
         }
 
-        public override List<string> generateVMArgs()
+        public override List<string> GenerateVMArgs()
         {
             throw new NotImplementedException();
         }
