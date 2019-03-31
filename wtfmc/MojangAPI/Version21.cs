@@ -21,7 +21,7 @@ namespace wtfmc.MojangAPI
     /// </summary>
     public sealed class Version21 : Version
     {
-        public Version21(JObject vdata, IProfile profile) : base(vdata)
+        public Version21(JObject vdata, Profile profile) : base(vdata)
         {
         }
 
@@ -90,22 +90,31 @@ namespace wtfmc.MojangAPI
 
         public override List<string> GenerateArgs()
         {
-            throw new NotImplementedException();
-            List<string> result;
-            RuleReader rr = new RuleReader();
-            
-            rr.Login = Login;
+            List<string> arguments = new List<string>();
+            RuleReader rr = new RuleReader
+            {
+                Login = Login
+            };
+            Hashtable arghash = GenParamHash();
             // Apply default parameters.
             JArray input = (JArray)vdata["arguments"]["game"];
             foreach (JToken i in input)
             {
                 if (i.HasValues)
                 {
-                    rr.Execute((JArray)i["rules"], () =>
+                    rr.Execute((JArray)(i["rules"]), () =>
                     {
+                        arguments.AddRange(from string s in i["value"]
+                                           select string.Format(new Formatter(), s, arghash));
                     });
                 }
+                else
+                {
+                    // Boilerplate code found here...
+                    arguments.Add(string.Format(new Formatter(), (string)i, arghash));
+                }
             }
+            return arguments;
         }
 
         public override List<string> GenerateVMArgs()

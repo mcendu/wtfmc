@@ -33,12 +33,14 @@ namespace wtfmc
         /// <summary>
         /// Horizontal resolution.
         /// </summary>
-        public int Width { get; set; }
+        public int? Width { get => width == null ? 854 : width ; set => width = value; }
+        private int? width;
 
         /// <summary>
         /// Vertical resolution.
         /// </summary>
-        public int Height { get; set; }
+        public int? Height { get => height == null ? 480 : height; set => height = value; }
+        private int? height;
 
         /// <summary>
         /// Path to JVM, or null for autodetection.

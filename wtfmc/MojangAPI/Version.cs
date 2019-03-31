@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -103,12 +104,27 @@ namespace wtfmc.MojangAPI
         public void CheckAssetsIndex()
         {
             string o = SetCD();
-            Download[] dl = { new Download((string)vdata["assetsindex"]["url"],
+            Download[] dl = { new Download((string)vdata["assetIndex"]["url"],
                 $"assets/indexes/{(string)vdata["assetIndex"]["id"]}",
                 (string)vdata["assetIndex"]["hash"]) };
             CheckFiles(dl);
             Directory.SetCurrentDirectory(o);
         }
+
+        protected Hashtable GenParamHash() => new Hashtable
+            {
+                { "auth_player_name", Login.Username },
+                { "version_name", "vanilla" },
+                { "game_directory", Profile.GameDir },
+                { "assets_root", $"{Profile.GameDir}/assets" },
+                { "assets_index_name", vdata["assetIndex"]["id"] },
+                { "auth_uuid", Login.ID },
+                { "auth_access_token", Login.AccessToken },
+                { "user_type", "mojang" },
+                { "version_type", vdata["type"] },
+                { "resolution_width", Profile.Width },
+                { "resolution_height", Profile.Height }
+            };
 
         public abstract void CheckLibraries();
         public abstract string GenerateClasspath();

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace wtfmc.MojangAPI
 {
-    class Formatter : IFormatProvider, ICustomFormatter
+    public class Formatter : IFormatProvider, ICustomFormatter
     {
         public string Format(string format, object arg, IFormatProvider formatProvider)
         {
@@ -14,22 +14,22 @@ namespace wtfmc.MojangAPI
                 throw new FormatException();
             Hashtable table = arg as Hashtable;
             Match match;
-            Regex regex = new Regex(@"\$\{\(.+)\}");
+            Regex regex = new Regex(@"\$\{(.+)\}");
             while (regex.IsMatch(format))
             {
                 match = regex.Match(format);
-                string key = match.Captures[1].Value;
-                regex.Replace(format, table[key] as string);
+                string key = match.Groups[1].Value;
+                format = regex.Replace(format, table[key] as string);
             }
             return format;
         }
 
         public object GetFormat(Type formatType)
         {
-            if (formatType != typeof(string))
-                return null;
-            else
+            if (formatType == typeof(IFormatProvider))
                 return this;
+            else
+                return null;
         }
     }
 }

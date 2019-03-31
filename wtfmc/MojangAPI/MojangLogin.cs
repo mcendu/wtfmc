@@ -20,7 +20,8 @@ namespace wtfmc.MojangAPI
         public string UID => (string)Data["userid"];
         public string AccessToken
             => (string)Data["accessToken"];
-        public string ClientToken { get; set; }
+        public string ClientToken
+            => (string)Data["clientToken"];
         public string ID => (string)Data["id"];
         public string Username => (string)Data["displayName"];
 
