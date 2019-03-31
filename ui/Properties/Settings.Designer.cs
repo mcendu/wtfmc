@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace wtf_kyhgzsh_minecraft_launcher.Properties
+namespace ui.Properties
 {
 
 

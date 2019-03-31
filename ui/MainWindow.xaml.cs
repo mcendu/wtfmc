@@ -16,7 +16,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using wtfmc;
 
-namespace wtf_kyhgzsh_minecraft_launcher
+namespace ui
 {
     /// <summary>
     /// MainWindow.xaml 的交互逻辑
@@ -34,16 +34,18 @@ namespace wtf_kyhgzsh_minecraft_launcher
         {
             if (way.SelectedIndex == 0)
             {
-                access_show.Content = "用户名:";
-                password.IsEnabled = false;
-                login.Content = "传入";
+                access_show.Content = "用户名";
+                password_show.Visibility = Visibility.Collapsed;
+                password.Visibility = Visibility.Collapsed;
+                login.Visibility = Visibility.Collapsed;
                 play_way = true;
             }
             else if (way.SelectedIndex == 1)
             {
-                access_show.Content = "账号:";
-                password.IsEnabled = true;
-                login.Content = "登陆";
+                access_show.Content = "邮箱/用户名";
+                password_show.Visibility = Visibility.Visible;
+                password.Visibility = Visibility.Visible;
+                login.Visibility = Visibility.Visible;
                 play_way = false;
             }
 
