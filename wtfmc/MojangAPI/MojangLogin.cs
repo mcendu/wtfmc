@@ -30,7 +30,7 @@ namespace wtfmc.MojangAPI
             BaseAddress = new Uri("https://authserver.mojang.com")
         };
 
-        public string LoginType => "mojang";
+        public LoginType LoginType => LoginType.Mojang;
 
         public JObject Data { get; set; }
 
@@ -158,7 +158,7 @@ namespace wtfmc.MojangAPI
         {
             JObject data = new JObject
             {
-                { "authtype", LoginType },
+                { "authtype", LoginType.ToString() },
                 { "userid", serverFmt["user"]["id"] },
                 { "id", serverFmt["selectedProfile"]["id"] },
                 { "accessToken", serverFmt["accessToken"] },

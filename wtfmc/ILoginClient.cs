@@ -13,7 +13,7 @@ namespace wtfmc
         /// <summary>
         /// The type of login.
         /// </summary>
-        string LoginType { get; }
+        LoginType LoginType { get; }
 
         /// <summary>
         /// The access token for the client.
@@ -77,5 +77,12 @@ namespace wtfmc
         public BadAuthException(string message) : base(message)
         {
         }
+    }
+
+    public enum LoginType
+    {
+        Offline = 0,
+        Mojang = 1,
+        Custom = -1
     }
 }

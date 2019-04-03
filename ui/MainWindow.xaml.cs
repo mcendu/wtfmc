@@ -23,13 +23,21 @@ namespace ui
     /// </summary>
     public partial class MainWindow : Window
     {
-
+        /// <summary>
+        /// 需要用到的配置数据（因为仍在研发，目前无用）
+        /// </summary>
+        private WTFConfig config = new WTFConfig();
+        private ILoginClient currentUser;
+        ILoginClient CurrentUser
+        {
+            get => currentUser;
+            set { currentUser = value; SetUpLoginData(CurrentUser); }
+        }
         public MainWindow()
         {
             InitializeComponent();
             reset_java_Click();
         }
-        bool play_way;
         private void way_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (way.SelectedIndex == 0)
@@ -38,7 +46,16 @@ namespace ui
                 password_show.Visibility = Visibility.Collapsed;
                 password.Visibility = Visibility.Collapsed;
                 login.Visibility = Visibility.Collapsed;
-                play_way = true;
+                for (int i1 = 0; i1 < config.Users.Count; i1++)
+                {
+                    ILoginClient i = config.Users[i1];
+                    if (i.LoginType == LoginType.Offline)
+                    {
+                        CurrentUser = i;
+                        config.SelectedUser = i1;
+                        return;
+                    }
+                }
             }
             else if (way.SelectedIndex == 1)
             {
@@ -46,7 +63,6 @@ namespace ui
                 password_show.Visibility = Visibility.Visible;
                 password.Visibility = Visibility.Visible;
                 login.Visibility = Visibility.Visible;
-                play_way = false;
             }
 
         }

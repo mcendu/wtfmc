@@ -33,7 +33,7 @@ namespace wtfmc
 
         private bool isDemo()
         {
-            if (Login.LoginType != "mojang")
+            if (Login.LoginType != LoginType.Mojang)
                 return false;
             JObject data = Login.Data;
             return !(bool)data["selectedProfile"]["paid"];

@@ -9,7 +9,7 @@ namespace wtfmc.MojangAPI
 {
     public sealed class Offline : ILoginClient
     {
-        public string LoginType => "offline";
+        public LoginType LoginType => wtfmc.LoginType.Offline;
 
         public string AccessToken => "00000000000000000000000000000000";
 
@@ -26,7 +26,7 @@ namespace wtfmc.MojangAPI
             new System.Security.Cryptography.RNGCryptoServiceProvider().GetBytes(i);
             Data = new JObject
             {
-                { "authtype", LoginType },
+                { "authtype", LoginType.ToString() },
                 { "username", email },
                 { "id", Util.bintohex(i) }
             };

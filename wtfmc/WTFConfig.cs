@@ -17,6 +17,9 @@ namespace wtfmc
         /// </summary>
         public WTFConfig()
         {
+            Profiles = new Dictionary<string, Profile>();
+            Users = new List<ILoginClient>();
+            SelectedUser = 0;
         }
 
         /// <summary>
