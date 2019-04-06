@@ -56,13 +56,13 @@
     <Compile Include="UtilTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\wtfmc\wtfmc.csproj">
-      <Project>{50ebba22-6e72-4c7c-b6d6-c14a49d21b04}</Project>
-      <Name>wtfmc</Name>
-    </ProjectReference>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <ProjectReference Include="..\wtfmc\wtfmc.csproj">
+      <Project>{a8bd9071-af7d-4ca4-add3-5d817b7df533}</Project>
+      <Name>wtfmc</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

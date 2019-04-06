@@ -3,8 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 
 namespace wtfmc.MojangAPI
@@ -119,7 +117,29 @@ namespace wtfmc.MojangAPI
 
         public override List<string> GenerateVMArgs()
         {
-            throw new NotImplementedException();
+            List<string> arguments = new List<string>();
+            RuleReader rr = new RuleReader();
+            Hashtable arghash = GenParamHash();
+            arguments.Add($"-Xmx{Xmx}");
+            // Apply default parameters.
+            JArray input = (JArray)vdata["arguments"]["game"];
+            foreach (JToken i in input)
+            {
+                if (i.HasValues)
+                {
+                    rr.Execute((JArray)(i["rules"]), () =>
+                    {
+                        arguments.AddRange(from string s in i["value"]
+                                           select string.Format(new Formatter(), s, arghash));
+                    });
+                }
+                else
+                {
+                    // Boilerplate code found here...
+                    arguments.Add(string.Format(new Formatter(), (string)i, arghash));
+                }
+            }
+            return arguments;
         }
     }
 }

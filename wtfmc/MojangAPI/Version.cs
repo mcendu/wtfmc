@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Management;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
@@ -125,6 +126,12 @@ namespace wtfmc.MojangAPI
                 { "resolution_width", Profile.Width },
                 { "resolution_height", Profile.Height }
             };
+
+        /// <summary>
+        /// Construct the -Xmx parameter.
+        /// </summary>
+        /// <returns>The max heap size allowed in the form of "-Xmx1024M".</returns>
+        protected abstract string GenXmx();
 
         public abstract void CheckLibraries();
         public abstract string GenerateClasspath();

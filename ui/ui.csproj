@@ -99,7 +99,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\wtfmc\wtfmc.csproj">
-      <Project>{50ebba22-6e72-4c7c-b6d6-c14a49d21b04}</Project>
+      <Project>{a8bd9071-af7d-4ca4-add3-5d817b7df533}</Project>
       <Name>wtfmc</Name>
     </ProjectReference>
   </ItemGroup>
