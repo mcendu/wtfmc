@@ -15,17 +15,17 @@ namespace wtfmc
     {
         public Profile Profile { get; set; }
 
-        public IVersionParser GetLatest()
+        public IVersion GetLatest()
         {
             throw new NotImplementedException();
         }
 
-        public IVersionParser GetLatestSnap()
+        public IVersion GetLatestSnap()
         {
             throw new NotImplementedException();
         }
 
-        public IVersionParser GetVersion(string identifier)
+        public IVersion GetVersion(string identifier)
         {
             IEnumerable<string> dlist = Directory.EnumerateDirectories(Profile.GameDir);
             var q = from vd in dlist

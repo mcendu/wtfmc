@@ -2,10 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Management;
-using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 
 namespace wtfmc.MojangAPI
@@ -15,7 +11,7 @@ namespace wtfmc.MojangAPI
     /// are mosly consistent across
     /// versions.
     /// </summary>
-    public abstract class Version : IVersionParser
+    public abstract class Version : IVersion
     {
         public Version(JObject vdata)
         {
@@ -131,11 +127,20 @@ namespace wtfmc.MojangAPI
         /// Construct the -Xmx parameter.
         /// </summary>
         /// <returns>The max heap size allowed in the form of "-Xmx1024M".</returns>
-        protected abstract string GenXmx();
+        protected string GenXmx()
+        {
+            // TODO.
+            // Intends to check for total memory 
+            // and use the lower of 2G and half
+            // of total mem. However, there is
+            // no cross-platform way to check
+            // memory, so 2G only.
+            return "-Xmx2G";
+        }
 
         public abstract void CheckLibraries();
         public abstract string GenerateClasspath();
-        public abstract List<string> GenerateArgs();
-        public abstract List<string> GenerateVMArgs();
+        public abstract List<string> GenerateArgs(ILoginClient login, Profile profile);
+        public abstract List<string> GenerateVMArgs(ILoginClient login, Profile profile);
     }
 }

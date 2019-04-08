@@ -46,12 +46,12 @@ namespace wtfmc
         /// <summary>
         /// A list of profiles by ID.
         /// </summary>
-        public Dictionary<string, Profile> Profiles { get; set; }
+        public IDictionary<string, Profile> Profiles { get; }
 
         /// <summary>
         /// A list of accounts.
         /// </summary>
-        public List<ILoginClient> Users { get; set; }
+        public IEnumerable<ILoginClient> Users { get; }
 
         /// <summary>
         /// The selected user entry.

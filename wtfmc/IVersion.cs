@@ -10,7 +10,7 @@ namespace wtfmc
     /// <summary>
     /// Loads version data.
     /// </summary>
-    public interface IVersionParser {
+    public interface IVersion {
 
         /// <summary>
         /// Login data.
@@ -39,11 +39,11 @@ namespace wtfmc
         /// <summary>
         /// Generate command line arguments for game.
         /// </summary>
-        List<string> GenerateArgs();
+        List<string> GenerateArgs(ILoginClient login, Profile profile);
 
         /// <summary>
         /// Generate command line arguments for JVM.
         /// </summary>
-        List<string> GenerateVMArgs();
+        List<string> GenerateVMArgs(ILoginClient login, Profile profile);
     }
 }

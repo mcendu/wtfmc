@@ -86,12 +86,12 @@ namespace wtfmc.MojangAPI
             Directory.SetCurrentDirectory(o);
         }
 
-        public override List<string> GenerateArgs()
+        public override List<string> GenerateArgs(ILoginClient login, Profile profile)
         {
             List<string> arguments = new List<string>();
             RuleReader rr = new RuleReader
             {
-                Login = Login
+                Login = login
             };
             Hashtable arghash = GenParamHash();
             // Apply default parameters.
@@ -115,12 +115,12 @@ namespace wtfmc.MojangAPI
             return arguments;
         }
 
-        public override List<string> GenerateVMArgs()
+        public override List<string> GenerateVMArgs(ILoginClient login, Profile profile)
         {
             List<string> arguments = new List<string>();
             RuleReader rr = new RuleReader();
             Hashtable arghash = GenParamHash();
-            arguments.Add($"-Xmx{Xmx}");
+            arguments.Add(GenXmx());
             // Apply default parameters.
             JArray input = (JArray)vdata["arguments"]["game"];
             foreach (JToken i in input)

@@ -23,13 +23,13 @@ namespace wtfmc.MojangAPI
 
         public Profile Profile { get; set; }
 
-        public IVersionParser GetLatest()
+        public IVersion GetLatest()
             => GetVersion((string)tov["latest"]["release"]);
 
-        public IVersionParser GetLatestSnap()
+        public IVersion GetLatestSnap()
             => GetVersion((string)tov["latest"]["snapshot"]);
 
-        public IVersionParser GetVersion(string identifier)
+        public IVersion GetVersion(string identifier)
         {
             var version = from v in (JArray)tov["versions"]
                           where (string)v["id"] == identifier

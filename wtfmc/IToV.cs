@@ -22,18 +22,18 @@ namespace wtfmc
         /// </summary>
         /// <param name="identifier">The identifier of a version</param>
         /// <returns></returns>
-        IVersionParser GetVersion(string identifier);
+        IVersion GetVersion(string identifier);
 
         /// <summary>
         /// Find the latest version.
         /// </summary>
         /// <returns></returns>
-        IVersionParser GetLatest();
+        IVersion GetLatest();
 
         /// <summary>
         /// Find the latest snapshot.
         /// </summary>
         /// <returns></returns>
-        IVersionParser GetLatestSnap();
+        IVersion GetLatestSnap();
     }
 }
