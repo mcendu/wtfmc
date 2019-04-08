@@ -42,16 +42,17 @@ namespace wtfmc.MojangAPI
             return Parse(JObject.Parse(obj));
         }
 
-        public Profile Profile { get; set; }
-
-        protected internal string SetCD()
+        // A shell on Dir.SetCD
+        protected internal string SetCurrentDirectory(string path)
         {
             string ret = Directory.GetCurrentDirectory();
-            Directory.SetCurrentDirectory(Profile.GameDir);
+            Directory.SetCurrentDirectory(path);
             return ret;
         }
 
         protected JObject vdata;
+
+        public string MainClass => (string)vdata["mainClass"];
 
         protected string VID => (string)vdata["id"];
 
@@ -59,9 +60,14 @@ namespace wtfmc.MojangAPI
 
         public ILoginClient Login { get; set; }
 
-        public void CheckClient()
+        public void CheckClient(string path)
         {
-            throw new NotImplementedException();
+            string o = SetCurrentDirectory(path);
+            Download[] dl = { new Download((string)vdata["downloads"]["client"]["url"],
+                $"versions/{VID}/{VID}.jar",
+                (string)vdata["downloads"]["client"]["hash"]) };
+            Util.CheckFiles(dl);
+            Directory.SetCurrentDirectory(o);
         }
         
         public void UnpackNatives()
@@ -69,9 +75,9 @@ namespace wtfmc.MojangAPI
             throw new NotImplementedException();
         }
 
-        public void CheckAssetsIndex()
+        public void CheckAssetsIndex(string path)
         {
-            string o = SetCD();
+            string o = SetCurrentDirectory(path);
             Download[] dl = { new Download((string)vdata["assetIndex"]["url"],
                 $"assets/indexes/{(string)vdata["assetIndex"]["id"]}",
                 (string)vdata["assetIndex"]["hash"]) };
@@ -82,19 +88,19 @@ namespace wtfmc.MojangAPI
             Directory.SetCurrentDirectory(o);
         }
 
-        protected Hashtable GenParamHash() => new Hashtable
+        protected Hashtable GenParamHash(Profile profile) => new Hashtable
             {
                 { "auth_player_name", Login.Username },
                 { "version_name", "vanilla" },
-                { "game_directory", Profile.GameDir },
-                { "assets_root", $"{Profile.GameDir}/assets" },
+                { "game_directory", profile.GameDir },
+                { "assets_root", $"{profile.GameDir}/assets" },
                 { "assets_index_name", vdata["assetIndex"]["id"] },
                 { "auth_uuid", Login.ID },
                 { "auth_access_token", Login.AccessToken },
                 { "user_type", "mojang" },
                 { "version_type", vdata["type"] },
-                { "resolution_width", Profile.Width },
-                { "resolution_height", Profile.Height }
+                { "resolution_width", profile.Width },
+                { "resolution_height", profile.Height }
             };
 
         /// <summary>
@@ -112,9 +118,14 @@ namespace wtfmc.MojangAPI
             return "-Xmx2G";
         }
 
-        public abstract void CheckLibraries();
+        public abstract void CheckLibraries(string path);
+
+        /// <remarks>
+        /// Can be implemented here, but for
+        /// optimization purposes (warai)...
+        /// </remarks>
         public abstract string GenerateClasspath();
         public abstract List<string> GenerateArgs(ILoginClient login, Profile profile);
-        public abstract List<string> GenerateVMArgs(ILoginClient login, Profile profile);
+        public abstract List<string> GenerateVMArgs();
     }
 }

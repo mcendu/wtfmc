@@ -19,10 +19,6 @@ namespace wtfmc.MojangAPI
     /// </summary>
     public sealed class Version21 : Version
     {
-        public Version21(JObject vdata, Profile profile) : base(vdata)
-        {
-        }
-
         public Version21(JObject vdata) : base(vdata)
         {
         }
@@ -49,9 +45,9 @@ namespace wtfmc.MojangAPI
             return classpath;
         }
 
-        public override void CheckLibraries()
+        public override void CheckLibraries(string path)
         {
-            string o = SetCD();
+            string o = SetCurrentDirectory(path);
             RuleReader rr = new RuleReader();
             HashSet<Download> downloads = new HashSet<Download>();
             foreach (JObject i in vdata["libraries"])
@@ -93,7 +89,7 @@ namespace wtfmc.MojangAPI
             {
                 Login = login
             };
-            Hashtable arghash = GenParamHash();
+            Hashtable arghash = GenParamHash(profile);
             // Apply default parameters.
             JArray input = (JArray)vdata["arguments"]["game"];
             foreach (JToken i in input)
@@ -115,11 +111,12 @@ namespace wtfmc.MojangAPI
             return arguments;
         }
 
-        public override List<string> GenerateVMArgs(ILoginClient login, Profile profile)
+        // Copy paste code from above.
+        public override List<string> GenerateVMArgs()
         {
             List<string> arguments = new List<string>();
             RuleReader rr = new RuleReader();
-            Hashtable arghash = GenParamHash();
+            Hashtable arghash = new Hashtable();
             arguments.Add(GenXmx());
             // Apply default parameters.
             JArray input = (JArray)vdata["arguments"]["game"];

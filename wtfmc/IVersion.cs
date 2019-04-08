@@ -16,14 +16,19 @@ namespace wtfmc
         /// Login data.
         /// </summary>
         ILoginClient Login { get; set; }
+
+        /// <summary>
+        /// The main class.
+        /// </summary>
+        string MainClass { get; }
         
         // Check files referenced in the
         // version json. The lack of both the
         // file itself or the integrity would
         // cause it to be downloaded.
-        void CheckAssetsIndex();
-        void CheckLibraries();
-        void CheckClient();
+        void CheckAssetsIndex(string path);
+        void CheckLibraries(string path);
+        void CheckClient(string path);
 
         /// <summary>
         /// Generate the value for the -cp option.
@@ -44,6 +49,6 @@ namespace wtfmc
         /// <summary>
         /// Generate command line arguments for JVM.
         /// </summary>
-        List<string> GenerateVMArgs(ILoginClient login, Profile profile);
+        List<string> GenerateVMArgs();
     }
 }

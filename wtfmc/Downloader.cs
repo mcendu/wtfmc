@@ -37,7 +37,7 @@ namespace wtfmc
             to.Position = 0;
 
             // Check the hash of the download
-            if (!Util.checkIntegrity(to, dl.Hash))
+            if (!(dl.Hash == null || Util.checkIntegrity(to, dl.Hash)))
             {
                 log.Error($"Failed to download {dl.Src.AbsoluteUri}");
                 throw new Exception(); // Fault the task
@@ -69,6 +69,18 @@ namespace wtfmc
             Src = new Uri(src);
             Path = path;
             Hash = hash;
+        }
+
+        public Download(Uri src, string path)
+        {
+            Src = src;
+            Path = path;
+        }
+
+        public Download(string src, string path)
+        {
+            Src = new Uri(src);
+            Path = path;
         }
 
         /// <summary>

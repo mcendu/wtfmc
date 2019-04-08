@@ -18,6 +18,17 @@ namespace wtfmc.MojangAPI
             this.tov = JObject.Parse(tov);
         }
 
+        /// <summary>
+        /// Download the official list.
+        /// </summary>
+        /// <param name="source">The download source.</param>
+        public static ToV Download(IDownloadSource source)
+        {
+            string dlsrc = source.Translate("https://launchermeta.mojang.com/mc/game/version_manifest.json");
+            string tov = Downloader.hclient.GetStringAsync(dlsrc).Result;
+            return new ToV(tov);
+        }
+
         private readonly JObject tov;
         public IDownloadSource DlSrc { get; set; }
 
