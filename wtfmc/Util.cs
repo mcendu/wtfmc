@@ -115,5 +115,34 @@ namespace wtfmc
                 }
             }
         }
+
+        public static void CheckFiles(IEnumerable<Download> filedata)
+        {
+            foreach (Download i in filedata)
+            {
+                string d = Directory.GetCurrentDirectory();
+                string[] compo = i.Path.Split(new char[] { Path.DirectorySeparatorChar });
+                foreach (string j in compo)
+                {
+                    d = Path.Combine(d, j);
+                    if (!Directory.Exists(d))
+                    {
+                        Directory.CreateDirectory(d);
+                    }
+                }
+                if (new Func<bool>(() => {
+                    try
+                    {
+                        FileStream f = File.Open(i.Path, FileMode.Open);
+                        return Util.checkIntegrity(f, i.Hash);
+                    }
+                    catch (IOException)
+                    {
+                        return false;
+                    }
+                })())
+                    Downloader.DownloadAsync(i).Wait();
+            }
+        }
     }
 }

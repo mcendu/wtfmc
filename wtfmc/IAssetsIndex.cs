@@ -10,7 +10,7 @@ namespace wtfmc
     /// <summary>
     /// Assets Index reader.
     /// </summary>
-    interface IAssetsIndex
+    public interface IAssetsIndex
     {
         /// <summary>
         /// The assets index.

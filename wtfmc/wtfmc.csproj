@@ -2,6 +2,24 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageLicenseUrl>https://directory.fsf.org/wiki/License:Expat</PackageLicenseUrl>
+    <Version>1.0.0.1</Version>
+    <PackageId>wtfmc</PackageId>
+    <Authors>Why They're so Freaking</Authors>
+    <Company />
+    <Product>WTFMC Library</Product>
+    <Copyright>Copyright (C) WTF Under MIT (Expat) License</Copyright>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="log4net" Version="2.0.8" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
 
 </Project>

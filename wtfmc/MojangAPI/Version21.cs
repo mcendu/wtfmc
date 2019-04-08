@@ -82,7 +82,7 @@ namespace wtfmc.MojangAPI
                     }
                 });
             }
-            CheckFiles(downloads);
+            Util.CheckFiles(downloads);
             Directory.SetCurrentDirectory(o);
         }
 
@@ -120,7 +120,7 @@ namespace wtfmc.MojangAPI
             List<string> arguments = new List<string>();
             RuleReader rr = new RuleReader();
             Hashtable arghash = GenParamHash();
-            arguments.Add($"-Xmx{Xmx}");
+            arguments.Add(GenXmx());
             // Apply default parameters.
             JArray input = (JArray)vdata["arguments"]["game"];
             foreach (JToken i in input)

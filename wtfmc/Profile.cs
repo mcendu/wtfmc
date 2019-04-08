@@ -62,5 +62,10 @@ namespace wtfmc
         /// Path to log configuration.
         /// </summary>
         public string LogConfig { get; set; }
+
+        public void Launch()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
