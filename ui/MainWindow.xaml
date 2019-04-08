@@ -32,7 +32,7 @@
                         <Label Content="登录方式" Margin="4,0" VerticalAlignment="Center"/>
                         <Label x:Name="access_show" Margin="4,0" VerticalAlignment="Center" Grid.Row="1"/>
                         <Label x:Name="password_show" Content="密码" Margin="4,0" VerticalAlignment="Center" Grid.Row="2"/>
-                        <TextBox x:Name="access" HorizontalAlignment="Stretch" Height="24" VerticalAlignment="Center" Margin="4" Grid.Column="1" Grid.Row="1" Focusable="False"/>
+                        <TextBox x:Name="access" HorizontalAlignment="Stretch" Height="24" VerticalAlignment="Center" Margin="4" Grid.Column="1" Grid.Row="1" Focusable="False" TextChanged="access_TextChanged"/>
                         <PasswordBox x:Name="password" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="4" Grid.Column="1" Grid.Row="2" Height="24"/>
                         <Button x:Name="login" Content="登录" HorizontalAlignment="Stretch" Margin="4" VerticalAlignment="Center" Click="login_Click" Grid.ColumnSpan="2" Grid.Row="3" Height="24"/>
                         <!-- Must be initialized after login due to an event handler -->
@@ -68,10 +68,10 @@
                             <RowDefinition Height="1*"/>
                         </Grid.RowDefinitions>
                         <Label Content="名称" HorizontalAlignment="Left" Margin="4,0,0,0" Padding="4" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
-                        <TextBox x:Name="display_name" Margin="4" VerticalAlignment="Center" VerticalContentAlignment="Stretch" Grid.Column="1" Height="24"/>
+                        <TextBox x:Name="display_name" Margin="4" VerticalAlignment="Center" VerticalContentAlignment="Stretch" Grid.Column="1" Height="24" TextChanged="display_name_TextChanged"/>
 
                         <Label Content="版本" HorizontalAlignment="Left" Margin="4,0,0,0" VerticalAlignment="Center" Padding="4" VerticalContentAlignment="Center" Grid.Row="1"/>
-                        <ComboBox x:Name="game_version" Margin="4" VerticalAlignment="Center" Grid.Row="1" Grid.Column="1" Padding="4" VerticalContentAlignment="Center" Height="24"/>
+                        <ComboBox x:Name="game_version" Margin="4" VerticalAlignment="Center" Grid.Row="1" Grid.Column="1" Padding="4" VerticalContentAlignment="Center" Height="24" SelectionChanged="game_version_SelectionChanged"/>
 
                         <Label Content="JVM路径" HorizontalAlignment="Left" Margin="4,0" Grid.Row="2" Padding="4" VerticalContentAlignment="Center" VerticalAlignment="Center"/>
                         <TextBox x:Name="jvm" Margin="4" VerticalAlignment="Center" Grid.Row="2" Grid.ColumnSpan="2" Grid.Column="1" Height="24"/>

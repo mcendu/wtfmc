@@ -74,7 +74,6 @@ namespace ui
 
         private void play_Click(object sender, RoutedEventArgs e)
         {
-
         }
 
         private void test_java_Click(object sender, RoutedEventArgs e)
@@ -102,6 +101,21 @@ namespace ui
         private void reset_java_Click()
         {
             jvm.Text = Util.locateJava();
+        }
+
+        private void access_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
+
+        private void display_name_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
+
+        private void game_version_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
         }
     }
 }

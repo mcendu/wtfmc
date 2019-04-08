@@ -59,35 +59,6 @@ namespace wtfmc.MojangAPI
 
         public ILoginClient Login { get; set; }
 
-        protected void CheckFiles(IEnumerable<Download> filedata)
-        {
-            foreach (Download i in filedata)
-            {
-                string d = Directory.GetCurrentDirectory();
-                string[] compo = i.Path.Split(new char[] { Path.DirectorySeparatorChar });
-                foreach (string j in compo)
-                {
-                    d = Path.Combine(d, j);
-                    if (!Directory.Exists(d))
-                    {
-                        Directory.CreateDirectory(d);
-                    }
-                }
-                if (new Func<bool>(() => {
-                    try
-                    {
-                        FileStream f = File.Open(i.Path, FileMode.Open);
-                        return Util.checkIntegrity(f, i.Hash);
-                    }
-                    catch (IOException)
-                    {
-                        return false;
-                    }
-                })())
-                    Downloader.DownloadAsync(i).Wait();
-            }
-        }
-
         public void CheckClient()
         {
             throw new NotImplementedException();
@@ -104,7 +75,10 @@ namespace wtfmc.MojangAPI
             Download[] dl = { new Download((string)vdata["assetIndex"]["url"],
                 $"assets/indexes/{(string)vdata["assetIndex"]["id"]}",
                 (string)vdata["assetIndex"]["hash"]) };
-            CheckFiles(dl);
+            Util.CheckFiles(dl);
+            // Load Assets.
+            AssetsIndex assets = new AssetsIndex(JObject.Parse(File.ReadAllText($"assets/indexes/{(string)vdata["assetIndex"]["id"]}")));
+            assets.checkAssets();
             Directory.SetCurrentDirectory(o);
         }
 

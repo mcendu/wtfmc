@@ -2,8 +2,15 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <ApplicationIcon />
-    <Win32Resource />
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageLicenseUrl>https://directory.fsf.org/wiki/License:Expat</PackageLicenseUrl>
+    <Version>1.0.0.1</Version>
+    <PackageId>wtfmc</PackageId>
+    <Authors>Why They're so Freaking</Authors>
+    <Company />
+    <Product>WTFMC Library</Product>
+    <Copyright>Copyright (C) WTF Under MIT (Expat) License</Copyright>
   </PropertyGroup>
 
   <ItemGroup>

@@ -82,7 +82,7 @@ namespace wtfmc.MojangAPI
                     }
                 });
             }
-            CheckFiles(downloads);
+            Util.CheckFiles(downloads);
             Directory.SetCurrentDirectory(o);
         }
 
