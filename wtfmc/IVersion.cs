@@ -39,11 +39,6 @@ namespace wtfmc
         string GenerateClasspath();
 
         /// <summary>
-        /// Unpack natives.
-        /// </summary>
-        void UnpackNatives();
-
-        /// <summary>
         /// Generate command line arguments for game.
         /// </summary>
         List<string> GenerateArgs(ILoginClient login, Profile profile);

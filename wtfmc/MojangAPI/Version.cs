@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using Newtonsoft.Json.Linq;
 
 namespace wtfmc.MojangAPI
@@ -65,6 +66,7 @@ namespace wtfmc.MojangAPI
             CheckClient(path);
             CheckLibraries(path);
             CheckAssetsIndex(path);
+            UnpackNatives(path);
         }
 
         private void CheckClient(string path)
@@ -77,9 +79,27 @@ namespace wtfmc.MojangAPI
             Directory.SetCurrentDirectory(o);
         }
         
-        public void UnpackNatives()
+        public void UnpackNatives(string path)
         {
-            throw new NotImplementedException();
+            string o = SetCurrentDirectory(path);
+            RuleReader rr = new RuleReader();
+            foreach (JObject i in vdata["libraries"])
+            {
+                rr.Execute(new Func<JArray>(() =>
+                {
+                    if (i.ContainsKey("rules"))
+                        return (JArray)i["rules"];
+                    return null;
+                })(),
+                () =>
+                {
+                    if (i.ContainsKey("natives"))
+                    {
+                        ZipFile.ExtractToDirectory((string)i["classifiers"]["natives-windows"]["path"], $"versions/{VID}/{VID}-natives");
+                    }
+                });
+                Directory.SetCurrentDirectory(o);
+            }
         }
 
         private void CheckAssetsIndex(string path)
