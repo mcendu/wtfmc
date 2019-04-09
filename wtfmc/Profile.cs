@@ -84,6 +84,10 @@ namespace wtfmc
         /// <param name="tov">The Table of Versions as a download source.</param>
         public void Launch(IToV tov, ILoginClient login)
         {
+            // --------------- //
+            // Check for data. //
+            // !!! TODO !!!    //
+            // --------------- //
             IVersion version = Discover(tov);
 
             // ---------------------- //
@@ -107,8 +111,11 @@ namespace wtfmc
             // ---- //
             // Run. //
             // ---- //
+            // Set arguments.
+            foreach (string i in args)
+                proc.StartInfo.Arguments += i + " ";
+            // Start process
             proc.Start();
-
         }
     }
 
