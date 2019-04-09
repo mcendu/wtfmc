@@ -45,7 +45,7 @@ namespace wtfmc.MojangAPI
             return classpath;
         }
 
-        public override void CheckLibraries(string path)
+        protected override void CheckLibraries(string path)
         {
             string o = SetCurrentDirectory(path);
             RuleReader rr = new RuleReader();

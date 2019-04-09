@@ -60,7 +60,14 @@ namespace wtfmc.MojangAPI
 
         public ILoginClient Login { get; set; }
 
-        public void CheckClient(string path)
+        public void CheckData(string path)
+        {
+            CheckClient(path);
+            CheckLibraries(path);
+            CheckAssetsIndex(path);
+        }
+
+        private void CheckClient(string path)
         {
             string o = SetCurrentDirectory(path);
             Download[] dl = { new Download((string)vdata["downloads"]["client"]["url"],
@@ -75,7 +82,7 @@ namespace wtfmc.MojangAPI
             throw new NotImplementedException();
         }
 
-        public void CheckAssetsIndex(string path)
+        private void CheckAssetsIndex(string path)
         {
             string o = SetCurrentDirectory(path);
             Download[] dl = { new Download((string)vdata["assetIndex"]["url"],
@@ -118,7 +125,7 @@ namespace wtfmc.MojangAPI
             return "-Xmx2G";
         }
 
-        public abstract void CheckLibraries(string path);
+        protected abstract void CheckLibraries(string path);
 
         /// <remarks>
         /// Can be implemented here, but for

@@ -22,13 +22,15 @@ namespace wtfmc
         /// </summary>
         string MainClass { get; }
         
-        // Check files referenced in the
-        // version json. The lack of both the
-        // file itself or the integrity would
-        // cause it to be downloaded.
-        void CheckAssetsIndex(string path);
-        void CheckLibraries(string path);
-        void CheckClient(string path);
+        /// <summary>
+        /// Check files referenced in the
+        /// version json. 
+        /// </summary>
+        /// <param name="path">The game directory.</param>
+        /// The lack of both the
+        /// file itself or the integrity would
+        /// cause it to be downloaded.
+        void CheckData(string path);
 
         /// <summary>
         /// Generate the value for the -cp option.
