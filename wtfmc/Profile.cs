@@ -86,10 +86,9 @@ namespace wtfmc
         {
             // --------------- //
             // Check for data. //
-            // !!! TODO !!!    //
             // --------------- //
             IVersion version = Discover(tov);
-
+            version.CheckData(GameDir);
             // ---------------------- //
             // Generate Command line. //
             // ---------------------- //
@@ -107,7 +106,6 @@ namespace wtfmc
             args.Add(version.MainClass);
             // Game arguments
             args.AddRange(version.GenerateArgs(login, this));
-
             // ---- //
             // Run. //
             // ---- //
