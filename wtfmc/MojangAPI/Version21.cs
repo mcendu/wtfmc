@@ -63,17 +63,17 @@ namespace wtfmc.MojangAPI
                     if (i.ContainsKey("natives"))
                     {
                         downloads.Add(new Download(
-                            (string)i["classifiers"]["natives-windows"]["url"],
-                            "libraries/" + (string)i["classifiers"]["natives-windows"]["path"],
-                            (string)i["classifiers"]["natives-windows"]["hash"]
+                            (string)i["downloads"]["classifiers"]["natives-windows"]["url"],
+                            "libraries/" + (string)i["downloads"]["classifiers"]["natives-windows"]["path"],
+                            (string)i["downloads"]["classifiers"]["natives-windows"]["sha1"]
                             ));
                     }
                     else
                     {
                         downloads.Add(new Download(
-                            (string)i["artifact"]["url"],
-                            "libraries/" + (string)i["artifact"]["path"],
-                            (string)i["artifact"]["hash"]
+                            (string)i["downloads"]["artifact"]["url"],
+                            "libraries/" + (string)i["downloads"]["artifact"]["path"],
+                            (string)i["downloads"]["artifact"]["sha1"]
                             ));
                     }
                 });

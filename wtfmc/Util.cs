@@ -16,7 +16,7 @@ namespace wtfmc
         /// </summary>
         /// <param name="bin">The byte array.</param>
         /// <returns>The hex representation of bin.</returns>
-        public static string bintohex(byte[] bin)
+        public static string Bintohex(byte[] bin)
         {
             string o = "";
             foreach (byte b in bin)
@@ -26,8 +26,14 @@ namespace wtfmc
             return o.ToLower();
         }
 
-        public static bool checkIntegrity(Stream hInput, string cksum)
-            => bintohex(SHA1.Create().ComputeHash(hInput)) == cksum;
+        /// <summary>
+        /// Check the integrity of a file.
+        /// </summary>
+        /// <param name="hInput"></param>
+        /// <param name="cksum"></param>
+        /// <returns>True if the sums match, false otherwise.</returns>
+        public static bool CheckIntegrity(Stream hInput, string cksum)
+            => Bintohex(SHA1.Create().ComputeHash(hInput)) == cksum;
 
         /// <summary>
         /// Locate a JVM.
@@ -46,7 +52,7 @@ namespace wtfmc
         /// </para>
         /// </remarks>
         /// <returns>The absolute path to the JVM.</returns>
-        public static string locateJava()
+        public static string LocateJava()
         {
             // look for base directory.
             string baseSPath;
@@ -116,32 +122,45 @@ namespace wtfmc
             }
         }
 
+        public static void GenDir(string destination)
+        {
+            string d = "";
+            List<string> compo = Path.GetFullPath(destination).Split(new char[] { Path.DirectorySeparatorChar }).ToList();
+            compo.RemoveAt(compo.Count - 1);
+            foreach (string j in compo)
+            {
+                d = Path.Combine(d, j);
+                if (!Directory.Exists(d))
+                {
+                    Directory.CreateDirectory(d);
+                }
+            }
+        }
+
         public static void CheckFiles(IEnumerable<Download> filedata)
         {
             foreach (Download i in filedata)
             {
-                string d = Directory.GetCurrentDirectory();
-                string[] compo = i.Path.Split(new char[] { Path.DirectorySeparatorChar });
-                foreach (string j in compo)
+                GenDir(i.Path);
+                if (!(new Func<bool>(() =>
                 {
-                    d = Path.Combine(d, j);
-                    if (!Directory.Exists(d))
-                    {
-                        Directory.CreateDirectory(d);
-                    }
-                }
-                if (new Func<bool>(() => {
                     try
                     {
                         FileStream f = File.Open(i.Path, FileMode.Open);
-                        return Util.checkIntegrity(f, i.Hash);
+                        bool b = CheckIntegrity(f, i.Hash);
+                        f.Dispose();
+                        Console.WriteLine($"Checking {i.Path} ({i.Hash})");
+                        return b;
                     }
                     catch (IOException)
                     {
                         return false;
                     }
-                })())
+                })()))
+                {
+                    Console.WriteLine($"Downloading {i.Path}");
                     Downloader.DownloadAsync(i).Wait();
+                }
             }
         }
     }

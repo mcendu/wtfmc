@@ -94,6 +94,12 @@ namespace wtfmc
                         continue;
                     else // "disallow", or invalid action
                         return;
+                } else
+                {
+                    if ((string)i["action"] == "allow")
+                        return;
+                    else // "disallow", or invalid action
+                        continue;
                 }
             }
             action();

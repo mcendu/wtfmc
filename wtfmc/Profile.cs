@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,15 +14,30 @@ namespace wtfmc
     public class Profile
     {
         /// <summary>
+        /// Construct a default, empty profile.
+        /// </summary>
+        public Profile()
+        {
+            ProfileType = ProfileType.LatestRelease;
+            DlSrc = new MojangAPI.DlSource();
+            GameDir = $@"{Environment.GetEnvironmentVariable("APPDATA")}/.minecraft";
+        }
+
+        /// <summary>
         /// The type of profile.
         /// </summary>
         public ProfileType ProfileType { get; set; }
 
         /// <summary>
+        /// The download source.
+        /// </summary>
+        public IDownloadSource DlSrc { get; set; }
+
+        /// <summary>
         /// The time a profile has been launched
         /// last time.
         /// </summary>
-        public DateTime LastUsed { get; internal set; }
+        public string LastUsed { get; internal set; }
 
         /// <summary>
         /// The version to be launched.
@@ -47,7 +63,8 @@ namespace wtfmc
         /// <summary>
         /// Path to JVM, or null for autodetection.
         /// </summary>
-        public string JVM { get; set; }
+        public string JVM { get => jvm == null ? Util.LocateJava() : jvm; set => jvm = value; }
+        private string jvm;
 
         /// <summary>
         /// The JVM args used while launching.
@@ -70,11 +87,11 @@ namespace wtfmc
             switch (ProfileType)
             {
                 case ProfileType.LatestRelease:
-                    return tov.GetLatest();
+                    return tov.GetLatest(DlSrc);
                 case ProfileType.LatestSnapshot:
-                    return tov.GetLatestSnap();
+                    return tov.GetLatestSnap(DlSrc);
                 default: // Always assume ProfileType.Custom upon null.
-                    return tov.GetVersion(Version);
+                    return tov.GetVersion(Version, DlSrc);
             }
         }
 
@@ -87,28 +104,44 @@ namespace wtfmc
             // --------------- //
             // Check for data. //
             // --------------- //
+
+            tov.GameDir = GameDir;
             IVersion version = Discover(tov);
             version.CheckData(GameDir);
+
             // ---------------------- //
             // Generate Command line. //
             // ---------------------- //
+
             Process proc = new Process();
             List<string> args = new List<string>();
+
             // JVM
             proc.StartInfo.FileName = JVM;
             args.Add(JVM);
+
             // JVM arguments
-            args.AddRange(version.GenerateVMArgs());
+            if (JVMArgs == null)
+                args.AddRange(version.GenerateVMArgs());
+            else
+                args.Add(JVMArgs);
+
             // Classpath
             args.Add("-cp");
             args.Add(version.GenerateClasspath());
+
             // Main class
             args.Add(version.MainClass);
+
             // Game arguments
             args.AddRange(version.GenerateArgs(login, this));
+
             // ---- //
             // Run. //
             // ---- //
+
+            // Update timestamp.
+            LastUsed = DateTime.Now.ToString(DateTimeFormatInfo.InvariantInfo.UniversalSortableDateTimePattern);
             // Set arguments.
             foreach (string i in args)
                 proc.StartInfo.Arguments += i + " ";

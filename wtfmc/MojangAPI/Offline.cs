@@ -28,7 +28,7 @@ namespace wtfmc.MojangAPI
             {
                 { "authtype", LoginType.ToString() },
                 { "username", email },
-                { "id", Util.bintohex(i) }
+                { "id", Util.Bintohex(i) }
             };
         }
 

@@ -37,11 +37,12 @@ namespace wtfmc
             to.Position = 0;
 
             // Check the hash of the download
-            if (!(dl.Hash == null || Util.checkIntegrity(to, dl.Hash)))
+            if (dl.Hash != null && !Util.CheckIntegrity(to, dl.Hash))
             {
                 log.Error($"Failed to download {dl.Src.AbsoluteUri}");
-                throw new Exception(); // Fault the task
+                return;
             }
+            to.Dispose();
             log.Info($"Downloaded {dl.Src.AbsoluteUri}");
         }
     }
@@ -90,7 +91,7 @@ namespace wtfmc
         {
             try
             {
-                return Util.checkIntegrity(File.Open(Path, FileMode.Open), Hash);
+                return Util.CheckIntegrity(File.Open(Path, FileMode.Open), Hash);
             }
             catch (IOException)
             {

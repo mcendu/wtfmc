@@ -100,7 +100,7 @@ namespace ui
         }
         private void reset_java_Click()
         {
-            jvm.Text = Util.locateJava();
+            jvm.Text = Util.LocateJava();
         }
 
         private void access_TextChanged(object sender, TextChangedEventArgs e)

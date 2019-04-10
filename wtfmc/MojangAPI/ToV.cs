@@ -30,27 +30,31 @@ namespace wtfmc.MojangAPI
         }
 
         private readonly JObject tov;
-        public IDownloadSource DlSrc { get; set; }
 
-        public Profile Profile { get; set; }
+        public string GameDir { get; set; }
 
-        public IVersion GetLatest()
-            => GetVersion((string)tov["latest"]["release"]);
+        public IVersion GetLatest(IDownloadSource dlsrc)
+            => GetVersion((string)tov["latest"]["release"], dlsrc);
 
-        public IVersion GetLatestSnap()
-            => GetVersion((string)tov["latest"]["snapshot"]);
+        public IVersion GetLatestSnap(IDownloadSource dlsrc)
+            => GetVersion((string)tov["latest"]["snapshot"], dlsrc);
 
-        public IVersion GetVersion(string identifier)
+        public IVersion GetVersion(string identifier, IDownloadSource dlsrc)
         {
             var version = from v in (JArray)tov["versions"]
                           where (string)v["id"] == identifier
                           select v["url"];
             string vdata =
                 Downloader.hclient.GetStringAsync(
-                    DlSrc.Translate((string)version.First())
+                    dlsrc.Translate((string)version.First())
                     )
                     .Result;
-            File.WriteAllText($"{Profile.GameDir}/versions/{identifier}/{identifier}.json", vdata);
+            Util.GenDir($"{GameDir}/versions/{identifier}/{identifier}.json");
+            FileStream f = File.Open($"{GameDir}/versions/{identifier}/{identifier}.json", FileMode.Create);
+            StreamWriter sw = new StreamWriter(f);
+            sw.Write(vdata);
+            sw.Dispose();
+            f.Dispose();
             return Version.Parse(vdata);
         }
     }

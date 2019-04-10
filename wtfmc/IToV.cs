@@ -12,28 +12,27 @@ namespace wtfmc
     public interface IToV
     {
         /// <summary>
-        /// The profile. Decides where stuff
-        /// are put.
+        /// Game Directory.
         /// </summary>
-        Profile Profile { get; set; }
+        string GameDir { get; set; }
 
         /// <summary>
         /// Find a version based on a version identifier.
         /// </summary>
         /// <param name="identifier">The identifier of a version</param>
         /// <returns></returns>
-        IVersion GetVersion(string identifier);
+        IVersion GetVersion(string identifier, IDownloadSource dlsrc);
 
         /// <summary>
         /// Find the latest version.
         /// </summary>
         /// <returns></returns>
-        IVersion GetLatest();
+        IVersion GetLatest(IDownloadSource dlsrc);
 
         /// <summary>
         /// Find the latest snapshot.
         /// </summary>
         /// <returns></returns>
-        IVersion GetLatestSnap();
+        IVersion GetLatestSnap(IDownloadSource dlsrc);
     }
 }

@@ -21,9 +21,9 @@ namespace wtfmc.MojangAPI
         public void checkAssets()
         {
             Directory.SetCurrentDirectory("assets/objects");
-            foreach (JObject i in Assets["objects"])
+            foreach (JProperty i in Assets["objects"])
             {
-                string dest = (string)i["hash"];
+                string dest = (string)i.Value["hash"];
                 string dir = dest.Substring(0, 2);
                 Download dl = new Download($"http://resources.download.minecraft.net/{dir}/{dest}", $"{dir}/{dest}", dest);
                 Util.CheckFiles(new Download[] { dl });

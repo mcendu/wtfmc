@@ -27,7 +27,7 @@ namespace wtfmc.MojangAPI
         public static Version Parse(JObject obj)
         {
             if (obj.ContainsKey("minimumLauncherVersion")) {
-                switch ((int)obj["minimunLauncherVersion"])
+                switch ((int)obj["minimumLauncherVersion"])
                 {
                     case 21:
                         return new Version21(obj);
@@ -74,7 +74,7 @@ namespace wtfmc.MojangAPI
             string o = SetCurrentDirectory(path);
             Download[] dl = { new Download((string)vdata["downloads"]["client"]["url"],
                 $"versions/{VID}/{VID}.jar",
-                (string)vdata["downloads"]["client"]["hash"]) };
+                (string)vdata["downloads"]["client"]["sha1"]) };
             Util.CheckFiles(dl);
             Directory.SetCurrentDirectory(o);
         }
@@ -82,6 +82,7 @@ namespace wtfmc.MojangAPI
         public void UnpackNatives(string path)
         {
             string o = SetCurrentDirectory(path);
+            Util.GenDir($"versions/{VID}/{VID}-natives/dummy");
             RuleReader rr = new RuleReader();
             foreach (JObject i in vdata["libraries"])
             {
@@ -95,7 +96,9 @@ namespace wtfmc.MojangAPI
                 {
                     if (i.ContainsKey("natives"))
                     {
-                        ZipFile.ExtractToDirectory((string)i["classifiers"]["natives-windows"]["path"], $"versions/{VID}/{VID}-natives");
+                        ZipFile.ExtractToDirectory(
+                            $"libraries/{(string)i["downloads"]["classifiers"]["natives-windows"]["path"]}",
+                            $"versions/{VID}/{VID}-natives");
                     }
                 });
                 Directory.SetCurrentDirectory(o);
@@ -107,10 +110,10 @@ namespace wtfmc.MojangAPI
             string o = SetCurrentDirectory(path);
             Download[] dl = { new Download((string)vdata["assetIndex"]["url"],
                 $"assets/indexes/{(string)vdata["assetIndex"]["id"]}",
-                (string)vdata["assetIndex"]["hash"]) };
+                (string)vdata["assetIndex"]["sha1"]) };
             Util.CheckFiles(dl);
             // Load Assets.
-            AssetsIndex assets = new AssetsIndex(JObject.Parse(File.ReadAllText($"assets/indexes/{(string)vdata["assetIndex"]["id"]}")));
+            AssetsIndex assets = new AssetsIndex(JObject.Parse(File.ReadAllText($"assets/indexes/{(string)vdata["assetIndex"]["id"]}.json")));
             assets.checkAssets();
             Directory.SetCurrentDirectory(o);
         }
