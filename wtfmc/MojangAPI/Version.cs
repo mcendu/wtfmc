@@ -96,9 +96,11 @@ namespace wtfmc.MojangAPI
                 {
                     if (i.ContainsKey("natives"))
                     {
+                        Directory.SetCurrentDirectory(path);
                         ZipFile.ExtractToDirectory(
                             $"libraries/{(string)i["downloads"]["classifiers"]["natives-windows"]["path"]}",
                             $"versions/{VID}/{VID}-natives");
+                        Directory.SetCurrentDirectory(o);
                     }
                 });
                 Directory.SetCurrentDirectory(o);
