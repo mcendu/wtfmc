@@ -36,7 +36,6 @@ namespace ui
         public MainWindow()
         {
             InitializeComponent();
-            reset_java_Click();
         }
         private void way_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -46,7 +45,7 @@ namespace ui
                 password_show.Visibility = Visibility.Collapsed;
                 password.Visibility = Visibility.Collapsed;
                 login.Visibility = Visibility.Collapsed;
-                for (int i1 = 0; i1 < config.Users.Count; i1++)
+                for (int i1 = 0; i1 < config.Users.Count(); i1++)
                 {
                     ILoginClient i = config.Users[i1];
                     if (i.LoginType == LoginType.Offline)
@@ -92,15 +91,6 @@ namespace ui
                 (sender as Button).Content = "测试：" + err.Message;
             }
             (sender as Button).Content = "测试：OK";
-        }
-
-        private void reset_java_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-        private void reset_java_Click()
-        {
-            jvm.Text = Util.LocateJava();
         }
 
         private void access_TextChanged(object sender, TextChangedEventArgs e)

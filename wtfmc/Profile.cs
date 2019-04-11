@@ -51,13 +51,13 @@ namespace wtfmc
         /// <summary>
         /// Horizontal resolution.
         /// </summary>
-        public int? Width { get => width == null ? 854 : width ; set => width = value; }
+        public int? Width { get => width ?? 854; set => width = value; }
         private int? width;
 
         /// <summary>
         /// Vertical resolution.
         /// </summary>
-        public int? Height { get => height == null ? 480 : height; set => height = value; }
+        public int? Height { get => height ?? 480; set => height = value; }
         private int? height;
 
         /// <summary>
@@ -122,13 +122,15 @@ namespace wtfmc
 
             // JVM arguments
             if (JVMArgs == null)
-                args.AddRange(version.GenerateVMArgs());
+                args.AddRange(version.GenerateVMArgs(login, this));
             else
+            {
+                // Custom args
                 args.Add(JVMArgs);
-
-            // Classpath
-            args.Add("-cp");
-            args.Add(version.GenerateClasspath());
+                // Classpath
+                args.Add("-cp");
+                args.Add(version.GenerateClasspath());
+            }
 
             // Main class
             args.Add(version.MainClass);

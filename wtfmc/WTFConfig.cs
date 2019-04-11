@@ -51,7 +51,7 @@ namespace wtfmc
         /// <summary>
         /// A list of accounts.
         /// </summary>
-        public IEnumerable<ILoginClient> Users { get; }
+        public IList<ILoginClient> Users { get; }
 
         /// <summary>
         /// The selected user entry.

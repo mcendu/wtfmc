@@ -6,13 +6,10 @@ using System.Threading.Tasks;
 
 namespace wtfmc.MojangAPI
 {
-    public class Formatter : IFormatProvider, ICustomFormatter
+    public class Formatter
     {
-        public string Format(string format, object arg, IFormatProvider formatProvider)
+        public string Format(string format, Hashtable table)
         {
-            if (!(arg is Hashtable))
-                throw new FormatException();
-            Hashtable table = arg as Hashtable;
             Match match;
             Regex regex = new Regex(@"\$\{(.+)\}");
             while (regex.IsMatch(format))
@@ -22,14 +19,6 @@ namespace wtfmc.MojangAPI
                 format = regex.Replace(format, table[key] as string);
             }
             return format;
-        }
-
-        public object GetFormat(Type formatType)
-        {
-            if (formatType == typeof(IFormatProvider))
-                return this;
-            else
-                return null;
         }
     }
 }

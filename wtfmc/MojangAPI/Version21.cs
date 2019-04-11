@@ -38,7 +38,7 @@ namespace wtfmc.MojangAPI
                 () =>
                 {
                     if (!i.ContainsKey("natives"))
-                        classpath += Path.GetFullPath("libraries/" + (string)i["artifact"]["path"]) + ";";
+                        classpath += Path.GetFullPath("libraries/" + (string)i["downloads"]["artifact"]["path"]) + ";";
                 });
             }
             classpath += $"versions/{VID}/{VID}.jar";
@@ -89,7 +89,7 @@ namespace wtfmc.MojangAPI
             {
                 Login = login
             };
-            Hashtable arghash = GenParamHash(profile);
+            Hashtable arghash = GenParamHash(login, profile);
             // Apply default parameters.
             JArray input = (JArray)vdata["arguments"]["game"];
             foreach (JToken i in input)
@@ -98,42 +98,59 @@ namespace wtfmc.MojangAPI
                 {
                     rr.Execute((JArray)(i["rules"]), () =>
                     {
-                        arguments.AddRange(from string s in i["value"]
-                                           select string.Format(new Formatter(), s, arghash));
+                        if (i["value"].HasValues)
+                        {
+                            foreach (string v in i["value"]) {
+                                arguments.Add(new Formatter().Format(v, arghash));
+                            }
+                        } else
+                        {
+                            arguments.Add(new Formatter().Format((string)i["value"], arghash));
+                        }
                     });
                 }
                 else
                 {
                     // Boilerplate code found here...
-                    arguments.Add(string.Format(new Formatter(), (string)i, arghash));
+                    arguments.Add(new Formatter().Format((string)i, arghash));
                 }
             }
             return arguments;
         }
 
         // Copy paste code from above.
-        public override List<string> GenerateVMArgs()
+        public override List<string> GenerateVMArgs(ILoginClient login, Profile profile)
         {
             List<string> arguments = new List<string>();
             RuleReader rr = new RuleReader();
-            Hashtable arghash = new Hashtable();
+            Hashtable arghash = GenParamHash(login, profile);
+            // Add heap limit.
             arguments.Add(GenXmx());
             // Apply default parameters.
-            JArray input = (JArray)vdata["arguments"]["game"];
+            JArray input = (JArray)vdata["arguments"]["jvm"];
             foreach (JToken i in input)
             {
                 if (i.HasValues)
                 {
                     rr.Execute((JArray)(i["rules"]), () =>
                     {
-                        arguments.AddRange(from string s in i["value"]
-                                           select string.Format(new Formatter(), s, arghash));
+                        if (i["value"].HasValues)
+                        {
+                            foreach (string v in i["value"])
+                            {
+                                arguments.Add(new Formatter().Format(v, arghash));
+                            }
+                        }
+                        else
+                        {
+                            arguments.Add(new Formatter().Format((string)i["value"], arghash));
+                        }
                     });
                 }
                 else
                 {
                     // Boilerplate code found here...
-                    arguments.Add(string.Format(new Formatter(), (string)i, arghash));
+                    arguments.Add(new Formatter().Format((string)i, arghash));
                 }
             }
             return arguments;

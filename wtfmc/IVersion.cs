@@ -13,11 +13,6 @@ namespace wtfmc
     public interface IVersion {
 
         /// <summary>
-        /// Login data.
-        /// </summary>
-        ILoginClient Login { get; set; }
-
-        /// <summary>
         /// The main class.
         /// </summary>
         string MainClass { get; }
@@ -46,6 +41,6 @@ namespace wtfmc
         /// <summary>
         /// Generate command line arguments for JVM.
         /// </summary>
-        List<string> GenerateVMArgs();
+        List<string> GenerateVMArgs(ILoginClient login, Profile profile);
     }
 }

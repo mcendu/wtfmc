@@ -59,8 +59,6 @@ namespace wtfmc.MojangAPI
 
         protected readonly IDownloadSource source;
 
-        public ILoginClient Login { get; set; }
-
         public void CheckData(string path)
         {
             CheckClient(path);
@@ -82,7 +80,9 @@ namespace wtfmc.MojangAPI
         public void UnpackNatives(string path)
         {
             string o = SetCurrentDirectory(path);
+            string tmp = $"{Util.TEMP}/wtfmc/dummy";
             Util.GenDir($"versions/{VID}/{VID}-natives/dummy");
+            Util.GenDir(tmp);
             RuleReader rr = new RuleReader();
             foreach (JObject i in vdata["libraries"])
             {
@@ -94,14 +94,30 @@ namespace wtfmc.MojangAPI
                 })(),
                 () =>
                 {
+                    Directory.SetCurrentDirectory(path);
                     if (i.ContainsKey("natives"))
                     {
-                        Directory.SetCurrentDirectory(path);
+                        // Extract files
                         ZipFile.ExtractToDirectory(
                             $"libraries/{(string)i["downloads"]["classifiers"]["natives-windows"]["path"]}",
-                            $"versions/{VID}/{VID}-natives");
-                        Directory.SetCurrentDirectory(o);
+                            tmp);
+                        // Remove META-INF
+                        Util.RmR($"{tmp}/META-INF");
+                        // Move files
+                        foreach (string j in Directory.EnumerateFileSystemEntries(tmp))
+                        {
+                            try
+                            {
+                                Directory.Move(Path.Combine(tmp, j), $"versions/{VID}/{VID}-natives/");
+                            }
+                            catch (IOException)
+                            {
+
+                            }
+                        }
+                        Util.RmR(tmp);
                     }
+                    Directory.SetCurrentDirectory(o);
                 });
                 Directory.SetCurrentDirectory(o);
             }
@@ -120,19 +136,23 @@ namespace wtfmc.MojangAPI
             Directory.SetCurrentDirectory(o);
         }
 
-        protected Hashtable GenParamHash(Profile profile) => new Hashtable
+        protected Hashtable GenParamHash(ILoginClient login, Profile profile) => new Hashtable
             {
-                { "auth_player_name", Login.Username },
+                { "auth_player_name", login.Username },
                 { "version_name", "vanilla" },
                 { "game_directory", profile.GameDir },
                 { "assets_root", $"{profile.GameDir}/assets" },
-                { "assets_index_name", vdata["assetIndex"]["id"] },
-                { "auth_uuid", Login.ID },
-                { "auth_access_token", Login.AccessToken },
+                { "assets_index_name", (string)vdata["assetIndex"]["id"] },
+                { "auth_uuid", login.ID },
+                { "auth_access_token", login.AccessToken },
                 { "user_type", "mojang" },
-                { "version_type", vdata["type"] },
+                { "version_type", (string)vdata["type"] },
                 { "resolution_width", profile.Width },
-                { "resolution_height", profile.Height }
+                { "resolution_height", profile.Height },
+                { "natives_directory", $"{VID}/{VID}-natives" },
+                { "launcher_name", "WTFMC" },
+                { "launcher_version", "" },
+                { "classpath", GenerateClasspath() }
             };
 
         /// <summary>
@@ -158,6 +178,6 @@ namespace wtfmc.MojangAPI
         /// </remarks>
         public abstract string GenerateClasspath();
         public abstract List<string> GenerateArgs(ILoginClient login, Profile profile);
-        public abstract List<string> GenerateVMArgs();
+        public abstract List<string> GenerateVMArgs(ILoginClient login, Profile profile);
     }
 }

@@ -10,13 +10,13 @@ namespace wtfmc_unit
         [TestMethod]
         public void BasicFormatTest()
         {
-            string fmt = "${hello} world";
+            string fmt = "${hello_W} world";
             System.Collections.Hashtable subhash = new System.Collections.Hashtable
             {
-                { "hello", "Hello" }
+                { "hello_W", "Hello" }
             };
             Formatter fmr = new Formatter();
-            Assert.AreEqual("Hello world", fmr.Format(fmt, subhash, fmr));
+            Assert.AreEqual("Hello world", fmr.Format(fmt, subhash));
         }
     }
 }

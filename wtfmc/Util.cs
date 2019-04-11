@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace wtfmc
 {
-    public static class Util
+    internal static class Util
     {
         /// <summary>
         /// Convert a byte array to its hex representation.
@@ -162,6 +162,37 @@ namespace wtfmc
                     Downloader.DownloadAsync(i).Wait();
                 }
             }
+        }
+
+        /// <summary>
+        /// Temp directory.
+        /// </summary>
+        public static string TEMP => Environment.OSVersion.Platform == PlatformID.Win32NT
+            ? Environment.GetEnvironmentVariable("TEMP")
+            : "/tmp";
+
+        /// <summary>
+        /// Remove a directory along with its contents.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// Named after "$ rm -r", from Unix.
+        /// </para>
+        /// <para>
+        /// This method only works for directories;
+        /// Using it on files can cause an exception
+        /// to be thrown. For that purpose, use
+        /// <code>System.IO.File.Delete</code>.
+        /// </para>
+        /// </remarks>
+        /// <param name="path">Path of the directory.</param>
+        public static void RmR (string path)
+        {
+            foreach (string i in Directory.EnumerateDirectories(path))
+                RmR(Path.Combine(path, i));
+            foreach (string i in Directory.EnumerateFiles(path))
+                File.Delete(Path.Combine(path, i));
+            Directory.Delete(path);
         }
     }
 }

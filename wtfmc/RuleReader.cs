@@ -55,8 +55,6 @@ namespace wtfmc
         {
             if (rule.ContainsKey("os"))
             {
-                // TODO: Add OS name regex matching to
-                // enable Windows-10 specific optimizations.
                 JObject os = (JObject)rule["os"];
                 if (os.ContainsKey("name"))
                     if ((string)os["name"] != "unknown" && (string)os["name"] != getOS())
@@ -64,6 +62,9 @@ namespace wtfmc
                 if (os.ContainsKey("arch"))
                     if ((string)os["arch"] != getArch())
                         return false;
+                if (os.ContainsKey("version"))
+                    // TODO: Add OS name regex matching.
+                    return false;
             }
             if (rule.ContainsKey("features"))
             {
