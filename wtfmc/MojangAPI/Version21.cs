@@ -37,7 +37,9 @@ namespace wtfmc.MojangAPI
                 })(),
                 () =>
                 {
-                    if (!i.ContainsKey("natives"))
+                    if (i.ContainsKey("natives"))
+                        classpath += Path.GetFullPath("libraries/" + (string)i["downloads"]["classifiers"]["natives-windows"]["path"]) + ";";
+                    else
                         classpath += Path.GetFullPath("libraries/" + (string)i["downloads"]["artifact"]["path"]) + ";";
                 });
             }

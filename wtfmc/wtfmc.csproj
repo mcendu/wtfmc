@@ -5,7 +5,7 @@
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageLicenseUrl>https://directory.fsf.org/wiki/License:Expat</PackageLicenseUrl>
-    <Version>1.0.0.1</Version>
+    <Version>0.0.1.1</Version>
     <PackageId>wtfmc</PackageId>
     <Authors>Why They're so Freaking</Authors>
     <Company />

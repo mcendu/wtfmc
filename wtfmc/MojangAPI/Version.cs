@@ -64,7 +64,6 @@ namespace wtfmc.MojangAPI
             CheckClient(path);
             CheckLibraries(path);
             CheckAssetsIndex(path);
-            UnpackNatives(path);
         }
 
         private void CheckClient(string path)
@@ -77,6 +76,8 @@ namespace wtfmc.MojangAPI
             Directory.SetCurrentDirectory(o);
         }
         
+        // 
+        /*
         public void UnpackNatives(string path)
         {
             string o = SetCurrentDirectory(path);
@@ -122,6 +123,7 @@ namespace wtfmc.MojangAPI
                 Directory.SetCurrentDirectory(o);
             }
         }
+        */
 
         private void CheckAssetsIndex(string path)
         {
