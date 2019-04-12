@@ -94,8 +94,19 @@ namespace wtfmc
                     return null;
                 }
             }
-
+#if DEBUG
+            return selPath + @"\bin\java.exe";
+#else
             return selPath + @"\bin\javaw.exe";
+#endif
+        }
+
+        // A shell on Dir.SetCD
+        public static string SetCurrentDirectory(string path)
+        {
+            string ret = Directory.GetCurrentDirectory();
+            Directory.SetCurrentDirectory(path);
+            return ret;
         }
 
         static IEnumerable<Tuple<short, short, string>> GetJavaVersion(IEnumerable<string> names)

@@ -12,6 +12,7 @@ namespace cli
             ILoginClient login = new wtfmc.MojangAPI.Offline();
             login.Authenticate("Player", null);
             p.Launch(wtfmc.MojangAPI.ToV.Download(new wtfmc.MojangAPI.DlSource()), login);
+            Console.ReadKey();
         }
     }
 }

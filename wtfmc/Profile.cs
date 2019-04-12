@@ -101,6 +101,7 @@ namespace wtfmc
         /// <param name="tov">The Table of Versions as a download source.</param>
         public void Launch(IToV tov, ILoginClient login)
         {
+            string o = Util.SetCurrentDirectory(GameDir);
             // --------------- //
             // Check for data. //
             // --------------- //
@@ -118,7 +119,6 @@ namespace wtfmc
 
             // JVM
             proc.StartInfo.FileName = JVM;
-            args.Add(JVM);
 
             // JVM arguments
             if (JVMArgs == null)
@@ -146,9 +146,11 @@ namespace wtfmc
             LastUsed = DateTime.Now.ToString(DateTimeFormatInfo.InvariantInfo.UniversalSortableDateTimePattern);
             // Set arguments.
             foreach (string i in args)
-                proc.StartInfo.Arguments += i + " ";
+                proc.StartInfo.Arguments += '"' + i + '"' + " ";
             // Start process
             proc.Start();
+
+            System.IO.Directory.SetCurrentDirectory(o);
         }
     }
 

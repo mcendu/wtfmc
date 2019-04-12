@@ -16,7 +16,7 @@ namespace wtfmc.MojangAPI
             {
                 match = regex.Match(format);
                 string key = match.Groups[1].Value;
-                format = regex.Replace(format, table[key] as string);
+                format = regex.Replace(format, table[key].ToString());
             }
             return format;
         }
