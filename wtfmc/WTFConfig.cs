@@ -23,8 +23,9 @@ namespace wtfmc
 
         public WTFConfig(JObject json)
         {
-            Profiles = (IDictionary<string, Profile>)from JProperty p in (JObject)json["profiles"]
-                       select new KeyValuePair<string, Profile>(p.Name, (Profile)p.Value);
+            Profiles = (from JProperty p in (JObject)json["profiles"]
+                       select new KeyValuePair<string, Profile>(p.Name, (Profile)p.Value))
+                       .ToDictionary(src => src.Key, src => src.Value);
             Users = (IList<ILoginClient>)from JObject o in (JArray)json["auth"]
                                          select Util.ParseLogin(o);
         }

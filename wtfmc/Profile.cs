@@ -19,8 +19,8 @@ namespace wtfmc
         /// </summary>
         public Profile()
         {
+            data = new JObject();
             ProfileType = ProfileType.LatestRelease;
-            DlSrc = new MojangAPI.DlSource();
         }
 
         /// <summary>
@@ -29,16 +29,21 @@ namespace wtfmc
         /// <param name="json"></param>
         public Profile(JObject json)
         {
-            ProfileType = (ProfileType)Enum.Parse(typeof(ProfileType), (string)json["type"]);
-            DlSrc = new MojangAPI.DlSource();
-            LastUsed = (string)json["lastUsed"];
-            Version = (string)json["version"];
+            data = json;
             Width = (int)json["width"];
             Height = (int)json["height"];
             JVM = (string)json["jvmPath"];
             JVMArgs = (string)json["jvmArgs"];
             GameDir = (string)json["gameDir"];
         }
+
+        public readonly JObject data;
+
+        /// <summary>
+        /// Returns the underlying JSON structure.
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString() => data.ToString();
 
         public static explicit operator Profile(JToken json)
         {
@@ -48,18 +53,27 @@ namespace wtfmc
         /// <summary>
         /// The type of profile.
         /// </summary>
-        public ProfileType ProfileType { get; set; }
-
-        /// <summary>
-        /// The download source.
-        /// </summary>
-        public IDownloadSource DlSrc { get; set; }
+        public ProfileType ProfileType
+        {
+            get => (ProfileType)Enum.Parse(typeof(ProfileType), (string)data["type"]);
+            set => data["type"] = value.ToString();
+        }
 
         /// <summary>
         /// The time a profile has been launched
         /// last time.
         /// </summary>
-        public string LastUsed { get; internal set; }
+        public string LastUsed
+        {
+            get => (string)data["lastUsed"];
+            internal set
+            {
+                if (data.ContainsKey("lastUsed"))
+                    data["lastUsed"] = value;
+                else
+                    data.Add("lastUsed", value);
+            }
+        }
 
         /// <summary>
         /// The version to be launched.
@@ -68,53 +82,103 @@ namespace wtfmc
         /// or LatestSnapshot, this prop shall be
         /// ignored.
         /// </summary>
-        public string Version { get; set; }
+        public string Version
+        {
+            get => (string)data["version"];
+            set => data["version"] = value;
+        }
 
         /// <summary>
         /// Horizontal resolution.
         /// </summary>
-        public int? Width { get => width ?? 854; set => width = value; }
-        private int? width;
+        public int? Width
+        {
+            get => (int?)data["resolutionWidth"] ?? 854;
+            set
+            {
+                if (data.ContainsKey("resolutionWidth"))
+                    data["resolutionWidth"] = value;
+                else
+                    data.Add("resolutionWidth", value);
+            }
+        }
 
         /// <summary>
         /// Vertical resolution.
         /// </summary>
-        public int? Height { get => height ?? 480; set => height = value; }
-        private int? height;
+        public int? Height
+        {
+            get => (int?)data["resolutionHeight"] ?? 854;
+            set
+            {
+                if (data.ContainsKey("resolutionHeight"))
+                    data["resolutionHeight"] = value;
+                else
+                    data.Add("resolutionHeight", value);
+            }
+        }
 
         /// <summary>
         /// Path to JVM, or null for autodetection.
         /// </summary>
-        public string JVM { get => jvm ?? Util.LocateJava(); set => jvm = value; }
-        private string jvm;
+        public string JVM
+        {
+            get => (string)data["jvm"] ?? Util.LocateJava();
+            set
+            {
+                if (data.ContainsKey("jvm"))
+                    data["jvm"] = value;
+                else
+                    data.Add("jvm", value);
+            }
+        }
 
         /// <summary>
         /// The JVM args used while launching.
         /// </summary>
-        public string JVMArgs { get; set; }
+        public string JVMArgs
+        {
+            get => (string)data["jvmArgs"];
+            set
+            {
+                if (data.ContainsKey("jvmArgs"))
+                    data["jvmArgs"] = value;
+                else
+                    data.Add("jvmArgs", value);
+            }
+        }
 
         /// <summary>
         /// The place where game files are
         /// placed.
         /// </summary>
-        public string GameDir { get => gameDir ?? $@"{Environment.GetEnvironmentVariable("APPDATA")}/.minecraft"; set => gameDir = value; }
-        private string gameDir;
+        public string GameDir
+        {
+            get => (string)data["gameDir"] ?? $@"{Environment.GetEnvironmentVariable("APPDATA")}/.minecraft";
+            set
+            {
+                if (data.ContainsKey("gameDir"))
+                    data["gameDir"] = value;
+                else
+                    data.Add("gameDir", value);
+            }
+        }
 
         /// <summary>
         /// Path to log configuration.
         /// </summary>
         public string LogConfig { get; set; }
 
-        private IVersion Discover(IToV tov)
+        private IVersion Discover(IToV tov, IDownloadSource dlSrc)
         {
             switch (ProfileType)
             {
                 case ProfileType.LatestRelease:
-                    return tov.GetLatest(DlSrc);
+                    return tov.GetLatest(dlSrc);
                 case ProfileType.LatestSnapshot:
-                    return tov.GetLatestSnap(DlSrc);
+                    return tov.GetLatestSnap(dlSrc);
                 default: // Always assume ProfileType.Custom upon null.
-                    return tov.GetVersion(Version, DlSrc);
+                    return tov.GetVersion(Version, dlSrc);
             }
         }
 
@@ -122,7 +186,7 @@ namespace wtfmc
         /// Start the game.
         /// </summary>
         /// <param name="tov">The Table of Versions as a download source.</param>
-        public void Launch(IToV tov, ILoginClient login)
+        public void Launch(IToV tov, IDownloadSource dlSrc, ILoginClient login)
         {
             string o = Util.SetCurrentDirectory(GameDir);
             // --------------- //
@@ -130,7 +194,7 @@ namespace wtfmc
             // --------------- //
 
             tov.GameDir = GameDir;
-            IVersion version = Discover(tov);
+            IVersion version = Discover(tov, dlSrc);
             version.CheckData(GameDir);
 
             // ---------------------- //
