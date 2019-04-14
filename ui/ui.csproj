@@ -36,6 +36,9 @@
   <PropertyGroup>
     <StartupObject>ui.App</StartupObject>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>img\wtfmc.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -102,6 +105,12 @@
       <Project>{a8bd9071-af7d-4ca4-add3-5d817b7df533}</Project>
       <Name>wtfmc</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="img\wtfmc.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="img\wtfmc.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

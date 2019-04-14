@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
@@ -20,7 +21,28 @@ namespace wtfmc
         {
             ProfileType = ProfileType.LatestRelease;
             DlSrc = new MojangAPI.DlSource();
-            GameDir = $@"{Environment.GetEnvironmentVariable("APPDATA")}/.minecraft";
+        }
+
+        /// <summary>
+        /// Construct a profile from a JSON.
+        /// </summary>
+        /// <param name="json"></param>
+        public Profile(JObject json)
+        {
+            ProfileType = (ProfileType)Enum.Parse(typeof(ProfileType), (string)json["type"]);
+            DlSrc = new MojangAPI.DlSource();
+            LastUsed = (string)json["lastUsed"];
+            Version = (string)json["version"];
+            Width = (int)json["width"];
+            Height = (int)json["height"];
+            JVM = (string)json["jvmPath"];
+            JVMArgs = (string)json["jvmArgs"];
+            GameDir = (string)json["gameDir"];
+        }
+
+        public static explicit operator Profile(JToken json)
+        {
+            return new Profile((JObject)json);
         }
 
         /// <summary>
@@ -63,7 +85,7 @@ namespace wtfmc
         /// <summary>
         /// Path to JVM, or null for autodetection.
         /// </summary>
-        public string JVM { get => jvm == null ? Util.LocateJava() : jvm; set => jvm = value; }
+        public string JVM { get => jvm ?? Util.LocateJava(); set => jvm = value; }
         private string jvm;
 
         /// <summary>
@@ -75,7 +97,8 @@ namespace wtfmc
         /// The place where game files are
         /// placed.
         /// </summary>
-        public string GameDir { get; set; }
+        public string GameDir { get => gameDir ?? $@"{Environment.GetEnvironmentVariable("APPDATA")}/.minecraft"; set => gameDir = value; }
+        private string gameDir;
 
         /// <summary>
         /// Path to log configuration.
@@ -121,9 +144,7 @@ namespace wtfmc
             proc.StartInfo.FileName = JVM;
 
             // JVM arguments
-            if (JVMArgs == null)
-                args.AddRange(version.GenerateVMArgs(login, this));
-            else
+            if (JVMArgs != null)
             {
                 // Custom args
                 args.Add(JVMArgs);
@@ -131,6 +152,8 @@ namespace wtfmc
                 args.Add("-cp");
                 args.Add(version.GenerateClasspath());
             }
+            else
+                args.AddRange(version.GenerateVMArgs(login, this));
 
             // Main class
             args.Add(version.MainClass);

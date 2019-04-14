@@ -6,14 +6,12 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using log4net;
 
 namespace wtfmc
 {
     public static class Downloader
     {
         public static readonly HttpClient hclient = new HttpClient();
-        private static readonly ILog log = LogManager.GetLogger(typeof(Downloader));
 
         /// <summary>
         /// Download a file.
@@ -22,7 +20,6 @@ namespace wtfmc
         public static async Task DownloadAsync(Download dl)
         {
             // Initialize variables
-            log.Info($"Downloading {dl.Src.AbsoluteUri}");
             Stream from = await hclient.GetStreamAsync(dl.Src);
             FileStream to = new FileStream(dl.Path, FileMode.Create, FileAccess.ReadWrite);
             int readlen;
@@ -31,7 +28,7 @@ namespace wtfmc
             // Concurrently move data from download stream to file
             while ((readlen = from.Read(buf, 0, 2048)) != 0)
             {
-                to.Write(buf, 0, 2048);
+                to.Write(buf, 0, readlen);
             }
             to.Flush();
             to.Position = 0;
@@ -39,11 +36,9 @@ namespace wtfmc
             // Check the hash of the download
             if (dl.Hash != null && !Util.CheckIntegrity(to, dl.Hash))
             {
-                log.Error($"Failed to download {dl.Src.AbsoluteUri}");
                 return;
             }
             to.Dispose();
-            log.Info($"Downloaded {dl.Src.AbsoluteUri}");
         }
     }
 

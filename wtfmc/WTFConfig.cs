@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace wtfmc
@@ -22,15 +21,13 @@ namespace wtfmc
             SelectedUser = 0;
         }
 
-        /// <summary>
-        /// From a file with JSON data.
-        /// </summary>
-        /// <param name="filepath">Path to file.</param>
-        public static WTFConfig FromJSON(string filepath)
-            => new JsonSerializer().Deserialize<WTFConfig>
-            (new JsonTextReader
-                (new StreamReader(filepath))
-            );
+        public WTFConfig(JObject json)
+        {
+            Profiles = (IDictionary<string, Profile>)from JProperty p in (JObject)json["profiles"]
+                       select new KeyValuePair<string, Profile>(p.Name, (Profile)p.Value);
+            Users = (IList<ILoginClient>)from JObject o in (JArray)json["auth"]
+                                         select Util.ParseLogin(o);
+        }
 
         /// <summary>
         /// The current launcher version.

@@ -17,6 +17,8 @@ namespace wtfmc.MojangAPI
         {
         }
 
+        public MojangLogin(JObject data) => Data = data;
+
         public string UID => (string)Data["userid"];
         public string AccessToken
             => (string)Data["accessToken"];
@@ -150,10 +152,6 @@ namespace wtfmc.MojangAPI
             return await AuthQuery(method, null);
         }
 
-        /// <remarks>
-        /// Do not refer to this when implementing
-        /// ILoginClient.Serialize.
-        /// </remarks>
         public JObject Serialize(JObject serverFmt)
         {
             JObject data = new JObject

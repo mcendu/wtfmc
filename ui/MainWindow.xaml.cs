@@ -92,20 +92,5 @@ namespace ui
             }
             (sender as Button).Content = "测试：OK";
         }
-
-        private void access_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
-        }
-
-        private void display_name_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
-        }
-
-        private void game_version_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
     }
 }

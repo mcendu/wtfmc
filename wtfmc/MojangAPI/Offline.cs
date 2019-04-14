@@ -9,6 +9,12 @@ namespace wtfmc.MojangAPI
 {
     public sealed class Offline : ILoginClient
     {
+        public Offline()
+        {
+        }
+
+        public Offline(JObject data) => Data = data;
+
         public LoginType LoginType => wtfmc.LoginType.Offline;
 
         public string AccessToken => "00000000000000000000000000000000";
@@ -18,7 +24,6 @@ namespace wtfmc.MojangAPI
         public string ID => (string)Data["id"];
 
         public JObject Data { get; set; }
-        public JObject AdditionalData { get => null; set { } }
 
         public void Authenticate(string email, string passwd)
         {

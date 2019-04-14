@@ -49,12 +49,12 @@ namespace wtfmc.MojangAPI
                     dlsrc.Translate((string)version.First())
                     )
                     .Result;
-            Util.GenDir($"{GameDir}/versions/{identifier}/{identifier}.json");
-            FileStream f = File.Open($"{GameDir}/versions/{identifier}/{identifier}.json", FileMode.Create);
-            StreamWriter sw = new StreamWriter(f);
-            sw.Write(vdata);
-            sw.Dispose();
-            f.Dispose();
+            Util.GenDir($"{GameDir}/versions/{identifier}");
+            using (FileStream f = File.Open($"{GameDir}/versions/{identifier}/{identifier}.json", FileMode.Create))
+            using (StreamWriter sw = new StreamWriter(f))
+            {
+                sw.Write(vdata);
+            }
             return Version.Parse(vdata);
         }
     }
