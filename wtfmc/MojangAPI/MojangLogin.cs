@@ -167,5 +167,7 @@ namespace wtfmc.MojangAPI
             };
             return data;
         }
+
+        public JObject ToJObject() => Data;
     }
 }

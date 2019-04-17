@@ -44,5 +44,7 @@ namespace wtfmc.MojangAPI
         public void Refresh()
         {
         }
+
+        public JObject ToJObject() => Data;
     }
 }

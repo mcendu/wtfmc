@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using wtfmc;
+using wtfmc.Config;
 
 namespace ui
 {
@@ -26,7 +27,7 @@ namespace ui
         /// <summary>
         /// 需要用到的配置数据（因为仍在研发，目前无用）
         /// </summary>
-        private WTFConfig config = new WTFConfig();
+        private ConfigRoot config;
         private ILoginClient currentUser;
         ILoginClient CurrentUser
         {
@@ -45,16 +46,6 @@ namespace ui
                 password_show.Visibility = Visibility.Collapsed;
                 password.Visibility = Visibility.Collapsed;
                 login.Visibility = Visibility.Collapsed;
-                for (int i1 = 0; i1 < config.Users.Count(); i1++)
-                {
-                    ILoginClient i = config.Users[i1];
-                    if (i.LoginType == LoginType.Offline)
-                    {
-                        CurrentUser = i;
-                        config.SelectedUser = i1;
-                        return;
-                    }
-                }
             }
             else if (way.SelectedIndex == 1)
             {
@@ -68,7 +59,7 @@ namespace ui
 
         private void login_Click(object sender, RoutedEventArgs e)
         {
-
+            
         }
 
         private void play_Click(object sender, RoutedEventArgs e)

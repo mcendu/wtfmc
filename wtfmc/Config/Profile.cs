@@ -7,19 +7,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace wtfmc
+namespace wtfmc.Config
 {
     /// <summary>
     /// WTFMC profile format.
     /// </summary>
-    public class Profile
+    public class Profile : JObject, IConfigStored
     {
         /// <summary>
         /// Construct a default, empty profile.
         /// </summary>
         public Profile()
         {
-            data = new JObject();
             ProfileType = ProfileType.LatestRelease;
         }
 
@@ -29,7 +28,6 @@ namespace wtfmc
         /// <param name="json"></param>
         public Profile(JObject json)
         {
-            data = json;
             Width = (int)json["width"];
             Height = (int)json["height"];
             JVM = (string)json["jvmPath"];
@@ -37,26 +35,13 @@ namespace wtfmc
             GameDir = (string)json["gameDir"];
         }
 
-        public readonly JObject data;
-
-        /// <summary>
-        /// Returns the underlying JSON structure.
-        /// </summary>
-        /// <returns></returns>
-        public override string ToString() => data.ToString();
-
-        public static explicit operator Profile(JToken json)
-        {
-            return new Profile((JObject)json);
-        }
-
         /// <summary>
         /// The type of profile.
         /// </summary>
         public ProfileType ProfileType
         {
-            get => (ProfileType)Enum.Parse(typeof(ProfileType), (string)data["type"]);
-            set => data["type"] = value.ToString();
+            get => (ProfileType)Enum.Parse(typeof(ProfileType), (string)this["type"]);
+            set => this["type"] = value.ToString();
         }
 
         /// <summary>
@@ -65,13 +50,13 @@ namespace wtfmc
         /// </summary>
         public string LastUsed
         {
-            get => (string)data["lastUsed"];
+            get => (string)this["lastUsed"];
             internal set
             {
-                if (data.ContainsKey("lastUsed"))
-                    data["lastUsed"] = value;
+                if (ContainsKey("lastUsed"))
+                    this["lastUsed"] = value;
                 else
-                    data.Add("lastUsed", value);
+                    Add("lastUsed", value);
             }
         }
 
@@ -84,8 +69,8 @@ namespace wtfmc
         /// </summary>
         public string Version
         {
-            get => (string)data["version"];
-            set => data["version"] = value;
+            get => (string)this["version"];
+            set => this["version"] = value;
         }
 
         /// <summary>
@@ -93,13 +78,13 @@ namespace wtfmc
         /// </summary>
         public int? Width
         {
-            get => (int?)data["resolutionWidth"] ?? 854;
+            get => (int?)this["resolutionWidth"] ?? 854;
             set
             {
-                if (data.ContainsKey("resolutionWidth"))
-                    data["resolutionWidth"] = value;
+                if (ContainsKey("resolutionWidth"))
+                    this["resolutionWidth"] = value;
                 else
-                    data.Add("resolutionWidth", value);
+                    Add("resolutionWidth", value);
             }
         }
 
@@ -108,13 +93,13 @@ namespace wtfmc
         /// </summary>
         public int? Height
         {
-            get => (int?)data["resolutionHeight"] ?? 854;
+            get => (int?)this["resolutionHeight"] ?? 854;
             set
             {
-                if (data.ContainsKey("resolutionHeight"))
-                    data["resolutionHeight"] = value;
+                if (ContainsKey("resolutionHeight"))
+                    this["resolutionHeight"] = value;
                 else
-                    data.Add("resolutionHeight", value);
+                    Add("resolutionHeight", value);
             }
         }
 
@@ -123,13 +108,13 @@ namespace wtfmc
         /// </summary>
         public string JVM
         {
-            get => (string)data["jvm"] ?? Util.LocateJava();
+            get => (string)this["jvm"] ?? Util.LocateJava();
             set
             {
-                if (data.ContainsKey("jvm"))
-                    data["jvm"] = value;
+                if (ContainsKey("jvm"))
+                    this["jvm"] = value;
                 else
-                    data.Add("jvm", value);
+                    Add("jvm", value);
             }
         }
 
@@ -138,13 +123,13 @@ namespace wtfmc
         /// </summary>
         public string JVMArgs
         {
-            get => (string)data["jvmArgs"];
+            get => (string)this["jvmArgs"];
             set
             {
-                if (data.ContainsKey("jvmArgs"))
-                    data["jvmArgs"] = value;
+                if (ContainsKey("jvmArgs"))
+                    this["jvmArgs"] = value;
                 else
-                    data.Add("jvmArgs", value);
+                    Add("jvmArgs", value);
             }
         }
 
@@ -154,13 +139,13 @@ namespace wtfmc
         /// </summary>
         public string GameDir
         {
-            get => (string)data["gameDir"] ?? $@"{Environment.GetEnvironmentVariable("APPDATA")}/.minecraft";
+            get => (string)this["gameDir"] ?? $@"{Environment.GetEnvironmentVariable("APPDATA")}/.minecraft";
             set
             {
-                if (data.ContainsKey("gameDir"))
-                    data["gameDir"] = value;
+                if (ContainsKey("gameDir"))
+                    this["gameDir"] = value;
                 else
-                    data.Add("gameDir", value);
+                    Add("gameDir", value);
             }
         }
 
@@ -239,6 +224,8 @@ namespace wtfmc
 
             System.IO.Directory.SetCurrentDirectory(o);
         }
+
+        public JObject ToJObject() => this;
     }
 
     public enum ProfileType

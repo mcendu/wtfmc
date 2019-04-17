@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace wtfmc
 {
-    public interface ILoginClient
+    public interface ILoginClient : Config.IConfigStored
     {
         /// <summary>
         /// The type of login.
@@ -29,11 +29,6 @@ namespace wtfmc
         /// The UUID of the user.
         /// </summary>
         string ID { get; }
-
-        /// <summary>
-        /// Raw login data.
-        /// </summary>
-        JObject Data { set; get; }
 
         /// <summary>
         /// Authenticate with server with email & password.

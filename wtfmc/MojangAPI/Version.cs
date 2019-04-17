@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using Newtonsoft.Json.Linq;
+using wtfmc.Config;
 
 namespace wtfmc.MojangAPI
 {

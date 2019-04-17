@@ -43,6 +43,7 @@ namespace ui
         {
             if (login == null)
             {
+                way.Visibility = Visibility.Collapsed;
                 access.Text = "";
                 access.Focusable = true;
                 ShowPassword();
