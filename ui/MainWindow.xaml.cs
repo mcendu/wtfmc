@@ -65,7 +65,7 @@ namespace ui
         private void play_Click(object sender, RoutedEventArgs e)
         {
         }
-        /*
+
         private void test_java_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -83,6 +83,5 @@ namespace ui
             }
             (sender as Button).Content = "测试：OK";
         }
-        */
     }
 }

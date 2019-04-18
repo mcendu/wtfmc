@@ -32,9 +32,9 @@ namespace ui
         protected override void OnContentChanged(object oldContent, object newContent)
         {
             base.OnContentChanged(oldContent, newContent);
-            if (content != null && newContent == null)
-                Grid.Children.Remove(content);
-            if (!(newContent is UIElement pend)) return;
+            UIElement pend = newContent as UIElement;
+            Grid.Children.Remove(content);
+            if (pend == null) return;
             content = pend;
             Grid.SetColumn(content, 1);
         }

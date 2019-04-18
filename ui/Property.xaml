@@ -8,8 +8,8 @@
              d:DesignHeight="40" d:DesignWidth="800">
     <Grid Name="Grid">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="50"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Label Name="LabelObject"/>
     </Grid>
