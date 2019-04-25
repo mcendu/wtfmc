@@ -43,20 +43,22 @@ namespace ui
         {
             if (login == null)
             {
-                way.Visibility = Visibility.Collapsed;
+                way.IsEnabled = true;
                 access.Text = "";
                 access.Focusable = true;
-                ShowPassword();
             }
             access.Text = login.Username;
             if (login.LoginType == LoginType.Mojang)
             {
+                way.IsEnabled = false;
                 access.Focusable = false;
             }
             else if (login.LoginType == LoginType.Offline)
             {
+                way.IsEnabled = true;
                 access.Focusable = true;
             }
+            ShowPassword();
         }
     }
 }

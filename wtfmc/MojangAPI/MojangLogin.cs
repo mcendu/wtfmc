@@ -15,6 +15,10 @@ namespace wtfmc.MojangAPI
     {
         public MojangLogin()
         {
+            Data = new JObject
+            {
+                { "authtype", LoginType.ToString() }
+            };
         }
 
         public MojangLogin(JObject data) => Data = data;

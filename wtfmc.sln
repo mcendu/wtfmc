@@ -3,13 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28729.10
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "unit", "wtfmc_unit\unit.csproj", "{2A035B27-81FA-41BF-9397-4876169BB3BB}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ui", "ui\ui.csproj", "{F8C05B08-8EDA-4308-80B0-B7B735415813}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "wtfmc", "wtfmc\wtfmc.csproj", "{A8BD9071-AF7D-4CA4-ADD3-5D817B7DF533}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cli", "cli\cli.csproj", "{AEAC9733-1473-46D2-9E6A-1BD32BB16E5E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "cli", "cli\cli.csproj", "{AEAC9733-1473-46D2-9E6A-1BD32BB16E5E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +15,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{2A035B27-81FA-41BF-9397-4876169BB3BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2A035B27-81FA-41BF-9397-4876169BB3BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2A035B27-81FA-41BF-9397-4876169BB3BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2A035B27-81FA-41BF-9397-4876169BB3BB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F8C05B08-8EDA-4308-80B0-B7B735415813}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F8C05B08-8EDA-4308-80B0-B7B735415813}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F8C05B08-8EDA-4308-80B0-B7B735415813}.Release|Any CPU.ActiveCfg = Release|Any CPU

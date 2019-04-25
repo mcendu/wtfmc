@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -46,6 +47,7 @@ namespace ui
                 password_show.Visibility = Visibility.Collapsed;
                 password.Visibility = Visibility.Collapsed;
                 login.Visibility = Visibility.Collapsed;
+                CurrentUser = new wtfmc.MojangAPI.Offline();
             }
             else if (way.SelectedIndex == 1)
             {
@@ -53,36 +55,60 @@ namespace ui
                 password_show.Visibility = Visibility.Visible;
                 password.Visibility = Visibility.Visible;
                 login.Visibility = Visibility.Visible;
+                CurrentUser = new wtfmc.MojangAPI.MojangLogin();
             }
-
         }
 
         private void login_Click(object sender, RoutedEventArgs e)
         {
-            
+            try
+            {
+                CurrentUser.Authenticate(access.Text, password.Password);
+            }
+            catch (AuthClientException)
+            {
+
+            }
+        }
+
+        private void Access_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (way.SelectedIndex == 0)
+            {
+                CurrentUser.Authenticate(access.Text, null);
+            }
         }
 
         private void play_Click(object sender, RoutedEventArgs e)
         {
         }
-        /*
-        private void test_java_Click(object sender, RoutedEventArgs e)
+
+        private void Identifier_LostFocus(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                string procname = jvm.Text;
-                string args = "-h";
-                Process p = new Process();
-                p.StartInfo.FileName = procname;
-                p.StartInfo.Arguments = args;
-                p.Start();
-            }
-            catch (Exception err)
-            {
-                (sender as Button).Content = "测试：" + err.Message;
-            }
-            (sender as Button).Content = "测试：OK";
+            JProperty oldprop = config.Property(profile.Text);
+            JProperty newprop = new JProperty(identifier.Text, (Profile)config[profile.Text]);
+            profile.Text = identifier.Text;
+            oldprop.Replace(newprop);
         }
-        */
+
+        /*
+private void test_java_Click(object sender, RoutedEventArgs e)
+{
+   try
+   {
+       string procname = jvm.Text;
+       string args = "-h";
+       Process p = new Process();
+       p.StartInfo.FileName = procname;
+       p.StartInfo.Arguments = args;
+       p.Start();
+   }
+   catch (Exception err)
+   {
+       (sender as Button).Content = "测试：" + err.Message;
+   }
+   (sender as Button).Content = "测试：OK";
+}
+*/
     }
 }

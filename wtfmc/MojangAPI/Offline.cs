@@ -11,6 +11,10 @@ namespace wtfmc.MojangAPI
     {
         public Offline()
         {
+            Data = new JObject
+            {
+                { "authtype", LoginType.ToString() }
+            };
         }
 
         public Offline(JObject data) => Data = data;
@@ -28,7 +32,8 @@ namespace wtfmc.MojangAPI
         public void Authenticate(string email, string passwd)
         {
             byte[] i = new byte[16];
-            new System.Security.Cryptography.RNGCryptoServiceProvider().GetBytes(i);
+            using (var rng = new System.Security.Cryptography.RNGCryptoServiceProvider())
+                rng.GetBytes(i);
             Data = new JObject
             {
                 { "authtype", LoginType.ToString() },
