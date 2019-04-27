@@ -31,6 +31,11 @@ namespace wtfmc
         string ID { get; }
 
         /// <summary>
+        /// The login status.
+        /// </summary>
+        bool LoggedIn { get; }
+
+        /// <summary>
         /// Authenticate with server with email & password.
         /// </summary>
         /// <param name="email">Email, or sometimes Legacy username.</param>

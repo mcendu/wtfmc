@@ -17,7 +17,8 @@ namespace wtfmc.MojangAPI
         {
             Data = new JObject
             {
-                { "authtype", LoginType.ToString() }
+                { "authtype", LoginType.ToString() },
+                { "loginStatus", false }
             };
         }
 
@@ -30,6 +31,7 @@ namespace wtfmc.MojangAPI
             => (string)Data["clientToken"];
         public string ID => (string)Data["id"];
         public string Username => (string)Data["displayName"];
+        public bool LoggedIn => (bool)Data["loginStatus"];
 
         private static readonly HttpClient hclient = new HttpClient
         {
@@ -131,6 +133,7 @@ namespace wtfmc.MojangAPI
         public void LogOut()
         {
             AuthQuery("invalidate").Wait();
+            Data["loginStatus"] = false;
         }
 
         public void Refresh()
@@ -168,6 +171,7 @@ namespace wtfmc.MojangAPI
                 { "properties", serverFmt["user"]["properties"] },
                 { "displayName", serverFmt["selectedProfile"]["name"] },
                 { "clientToken", serverFmt["clientToken"] },
+                { "loginStatus", true }
             };
             return data;
         }

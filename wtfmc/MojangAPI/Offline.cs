@@ -27,6 +27,8 @@ namespace wtfmc.MojangAPI
 
         public string ID => (string)Data["id"];
 
+        public bool LoggedIn => Data.ContainsKey("username");
+
         public JObject Data { get; set; }
 
         public void Authenticate(string email, string passwd)

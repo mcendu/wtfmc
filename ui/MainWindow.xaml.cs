@@ -47,15 +47,22 @@ namespace ui
                 password_show.Visibility = Visibility.Collapsed;
                 password.Visibility = Visibility.Collapsed;
                 login.Visibility = Visibility.Collapsed;
-                CurrentUser = new wtfmc.MojangAPI.Offline();
             }
             else if (way.SelectedIndex == 1)
             {
                 access_show.Content = "邮箱/用户名";
                 password_show.Visibility = Visibility.Visible;
                 password.Visibility = Visibility.Visible;
-                login.Visibility = Visibility.Visible;
-                CurrentUser = new wtfmc.MojangAPI.MojangLogin();
+                if (CurrentUser.LoggedIn && CurrentUser.LoginType == LoginType.Mojang)
+                {
+                    login.Visibility = Visibility.Collapsed;
+                    logout.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    login.Visibility = Visibility.Visible;
+                    logout.Visibility = Visibility.Collapsed;
+                }
             }
         }
 
@@ -63,11 +70,13 @@ namespace ui
         {
             try
             {
+                if (access.Text.Length == 0)
+                    throw new Exception("请输入邮箱/用户名。");
                 CurrentUser.Authenticate(access.Text, password.Password);
             }
-            catch (AuthClientException)
+            catch (Exception exception)
             {
-
+                Error = exception;
             }
         }
 

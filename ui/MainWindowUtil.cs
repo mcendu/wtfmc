@@ -52,13 +52,35 @@ namespace ui
             {
                 way.IsEnabled = false;
                 access.Focusable = false;
+                way.SelectedIndex = 1;
             }
             else if (login.LoginType == LoginType.Offline)
             {
                 way.IsEnabled = true;
                 access.Focusable = true;
+                way.SelectedIndex = 0;
             }
             ShowPassword();
+        }
+
+        private Exception error;
+        public Exception Error
+        {
+            get => error;
+            set
+            {
+                error = value;
+                if (value == null)
+                {
+                    errorborder.Visibility = Visibility.Collapsed;
+                    errorbox.Text = null;
+                }
+                else
+                {
+                    errorborder.Visibility = Visibility.Visible;
+                    errorbox.Text = $"{value.Message}";
+                }
+            }
         }
     }
 }
