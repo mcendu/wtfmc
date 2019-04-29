@@ -12,7 +12,15 @@ namespace cli
             Profile p = new Profile();
             ILoginClient login = new wtfmc.MojangAPI.Offline();
             login.Authenticate("Player", null);
-            p.Launch(wtfmc.MojangAPI.ToV.Download(new wtfmc.MojangAPI.DlSource()),new wtfmc.MojangAPI.DlSource() , login);
+            try
+            {
+                p.Launch(wtfmc.MojangAPI.ToV.Download(new wtfmc.MojangAPI.DlSource()), new wtfmc.MojangAPI.DlSource(), login);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"{e.GetType().ToString()}: {e.Message}");
+                Console.WriteLine(e.StackTrace);
+            }
             Console.ReadKey();
         }
     }
