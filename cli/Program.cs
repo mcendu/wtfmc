@@ -1,5 +1,6 @@
 ﻿using System;
 using wtfmc;
+using wtfmc.Config;
 
 namespace cli
 {

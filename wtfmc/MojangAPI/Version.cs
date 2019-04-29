@@ -130,7 +130,7 @@ namespace wtfmc.MojangAPI
         {
             string o = SetCurrentDirectory(path);
             Download[] dl = { new Download((string)vdata["assetIndex"]["url"],
-                $"assets/indexes/{(string)vdata["assetIndex"]["id"]}",
+                $"assets/indexes/{(string)vdata["assetIndex"]["id"]}.json",
                 (string)vdata["assetIndex"]["sha1"]) };
             Util.CheckFiles(dl);
             // Load Assets.

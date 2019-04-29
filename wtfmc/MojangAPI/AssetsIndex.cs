@@ -20,6 +20,7 @@ namespace wtfmc.MojangAPI
 
         public void checkAssets()
         {
+            Util.GenDir("assets/objects");
             Directory.SetCurrentDirectory("assets/objects");
             foreach (JProperty i in Assets["objects"])
             {

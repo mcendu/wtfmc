@@ -173,6 +173,7 @@ namespace wtfmc.Config
         /// <param name="tov">The Table of Versions as a download source.</param>
         public void Launch(IToV tov, IDownloadSource dlSrc, ILoginClient login)
         {
+            Util.GenDir(GameDir);
             string o = Util.SetCurrentDirectory(GameDir);
             // --------------- //
             // Check for data. //
