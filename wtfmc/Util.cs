@@ -62,7 +62,7 @@ namespace wtfmc
             foreach (Download i in filedata)
             {
                 GenDir(Path.GetDirectoryName(i.Path));
-                if (!(new Func<bool>(() =>
+                if (!new Func<bool>(() =>
                 {
                     try
                     {
@@ -71,16 +71,14 @@ namespace wtfmc
                         {
                             b = CheckIntegrity(f, i.Hash);
                         }
-                        Console.WriteLine($"Checking {i.Path} ({i.Hash})");
                         return b;
                     }
                     catch (IOException)
                     {
                         return false;
                     }
-                })()))
+                })())
                 {
-                    Console.WriteLine($"Downloading {i.Path}");
                     Downloader.DownloadAsync(i).Wait();
                 }
             }
