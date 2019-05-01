@@ -17,7 +17,7 @@ namespace wtfmc.Config
         /// <summary>
         /// Construct a default, empty profile.
         /// </summary>
-        public Profile()
+        public Profile() : base()
         {
             ProfileType = ProfileType.LatestRelease;
         }
@@ -26,13 +26,21 @@ namespace wtfmc.Config
         /// Construct a profile from a JSON.
         /// </summary>
         /// <param name="json"></param>
-        public Profile(JObject json)
+        public Profile(JObject json) : base(json)
         {
-            Width = (int)json["width"];
-            Height = (int)json["height"];
-            JVM = (string)json["jvmPath"];
-            JVMArgs = (string)json["jvmArgs"];
-            GameDir = (string)json["gameDir"];
+
+        }
+
+        /// <summary>
+        /// Set the key of a property.
+        /// </summary>
+        /// <param name="key"></param>
+        internal void SetKey(string key, JToken value)
+        {
+            if (ContainsKey(key))
+                this[key] = value;
+            else
+                Add(key, value);
         }
 
         /// <summary>
@@ -51,13 +59,7 @@ namespace wtfmc.Config
         public string LastUsed
         {
             get => (string)this["lastUsed"];
-            internal set
-            {
-                if (ContainsKey("lastUsed"))
-                    this["lastUsed"] = value;
-                else
-                    Add("lastUsed", value);
-            }
+            internal set => SetKey("lastUsed", value);
         }
 
         /// <summary>
@@ -70,7 +72,7 @@ namespace wtfmc.Config
         public string Version
         {
             get => (string)this["version"];
-            set => this["version"] = value;
+            set => SetKey("version", value);
         }
 
         /// <summary>
@@ -79,13 +81,7 @@ namespace wtfmc.Config
         public int? Width
         {
             get => (int?)this["resolutionWidth"] ?? 854;
-            set
-            {
-                if (ContainsKey("resolutionWidth"))
-                    this["resolutionWidth"] = value;
-                else
-                    Add("resolutionWidth", value);
-            }
+            set => SetKey("resolutionWidth", value);
         }
 
         /// <summary>
@@ -94,13 +90,7 @@ namespace wtfmc.Config
         public int? Height
         {
             get => (int?)this["resolutionHeight"] ?? 854;
-            set
-            {
-                if (ContainsKey("resolutionHeight"))
-                    this["resolutionHeight"] = value;
-                else
-                    Add("resolutionHeight", value);
-            }
+            set => SetKey("resolutionHeight", value);
         }
 
         /// <summary>
@@ -109,13 +99,7 @@ namespace wtfmc.Config
         public string JVM
         {
             get => (string)this["jvm"] ?? Util.LocateJava();
-            set
-            {
-                if (ContainsKey("jvm"))
-                    this["jvm"] = value;
-                else
-                    Add("jvm", value);
-            }
+            set => SetKey("jvm", value);
         }
 
         /// <summary>
@@ -124,13 +108,7 @@ namespace wtfmc.Config
         public string JVMArgs
         {
             get => (string)this["jvmArgs"];
-            set
-            {
-                if (ContainsKey("jvmArgs"))
-                    this["jvmArgs"] = value;
-                else
-                    Add("jvmArgs", value);
-            }
+            set => SetKey("jvmArgs", value);
         }
 
         /// <summary>
@@ -140,13 +118,7 @@ namespace wtfmc.Config
         public string GameDir
         {
             get => (string)this["gameDir"] ?? $@"{Environment.GetEnvironmentVariable("APPDATA")}/.minecraft";
-            set
-            {
-                if (ContainsKey("gameDir"))
-                    this["gameDir"] = value;
-                else
-                    Add("gameDir", value);
-            }
+            set => SetKey("gameDir", value);
         }
 
         /// <summary>

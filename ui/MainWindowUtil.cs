@@ -14,7 +14,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using wtfmc;
+using wtfmc.Config;
 
 namespace ui
 {
@@ -23,6 +26,25 @@ namespace ui
      */
     public partial class MainWindow : Window
     {
+        internal void InitializeConfig(string path)
+        {
+            try
+            {
+                // Attempt to read from config file.
+                JObject configData = JObject.Load(new JsonTextReader(new StreamReader(File.Open(path, FileMode.Open))));
+                config = (ConfigRoot)configData;
+            } catch (FileNotFoundException)
+            {
+                // Generate a new config using latest release.
+                config = new ConfigRoot();
+                config.Profiles.Add("latestRelease", new Profile {
+                    
+                });
+            }
+        }
+
+        internal void InitializeConfig() => InitializeConfig(Directory.GetCurrentDirectory());
+
         private void ShowPassword()
         {
             if (way.SelectedIndex == 0) // 离线登录
@@ -82,5 +104,20 @@ namespace ui
                 }
             }
         }
+
+        /// <summary>
+        /// Write configuration to a path.
+        /// </summary>
+        /// <param name="path">The path to write the configuration to.</param>
+        public void WriteConfig(string path)
+        {
+            File.Create(path);
+            File.WriteAllText(path, config.ToString());
+        }
+
+        /// <summary>
+        /// Write configuration to the current directory.
+        /// </summary>
+        public void WriteConfig() => WriteConfig(Directory.GetCurrentDirectory());
     }
 }

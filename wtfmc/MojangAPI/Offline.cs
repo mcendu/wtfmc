@@ -33,6 +33,8 @@ namespace wtfmc.MojangAPI
 
         public void Authenticate(string email, string passwd)
         {
+            if (email == null)
+                throw new BadAuthException("Username is empty.");
             byte[] i = new byte[16];
             using (var rng = new System.Security.Cryptography.RNGCryptoServiceProvider())
                 rng.GetBytes(i);

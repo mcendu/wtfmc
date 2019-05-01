@@ -26,7 +26,7 @@ namespace ui
     public partial class MainWindow : Window
     {
         /// <summary>
-        /// 需要用到的配置数据（因为仍在研发，目前无用）
+        /// 需要用到的配置数据
         /// </summary>
         private ConfigRoot config;
         private ILoginClient currentUser;
@@ -38,6 +38,7 @@ namespace ui
         public MainWindow()
         {
             InitializeComponent();
+            InitializeConfig();
         }
         private void way_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -53,7 +54,9 @@ namespace ui
                 access_show.Content = "邮箱/用户名";
                 password_show.Visibility = Visibility.Visible;
                 password.Visibility = Visibility.Visible;
-                if (CurrentUser.LoggedIn && CurrentUser.LoginType == LoginType.Mojang)
+                if (CurrentUser != null
+                    && CurrentUser.LoggedIn
+                    && CurrentUser?.LoginType == LoginType.Mojang)
                 {
                     login.Visibility = Visibility.Collapsed;
                     logout.Visibility = Visibility.Visible;
@@ -71,8 +74,10 @@ namespace ui
             try
             {
                 if (access.Text.Length == 0)
-                    throw new Exception("请输入邮箱/用户名。");
+                    throw new BadAuthException("请输入邮箱/用户名。");
                 CurrentUser.Authenticate(access.Text, password.Password);
+                SetUpLoginData(CurrentUser);
+                WriteConfig();
             }
             catch (Exception exception)
             {
@@ -80,16 +85,16 @@ namespace ui
             }
         }
 
-        private void Access_LostFocus(object sender, RoutedEventArgs e)
+        private void Logout_Click(object sender, RoutedEventArgs e)
         {
-            if (way.SelectedIndex == 0)
-            {
-                CurrentUser.Authenticate(access.Text, null);
-            }
+            CurrentUser.LogOut();
+            CurrentUser = null;
         }
 
         private void play_Click(object sender, RoutedEventArgs e)
         {
+            // Write all config changes.
+            WriteConfig();
         }
 
         private void Identifier_LostFocus(object sender, RoutedEventArgs e)
